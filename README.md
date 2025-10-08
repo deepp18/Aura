@@ -1,82 +1,71 @@
-AURA: An Intelligent, Gamified System for Mood Tracking and Dream-Based Emotional Analysis
-Problem Statement
+# 🌈 AURA: An Intelligent, Gamified System for Mood Tracking and Dream-Based Emotional Analysis
 
-“Mental wellness begins with understanding one’s own emotions.”
+> “Mental wellness begins with understanding one’s own emotions.”
 
-Mental health has become a significant concern in today’s fast-paced, digitally connected society, particularly among younger populations. Existing mental wellness platforms and apps often lack personalization, interactivity, and emotional engagement, leading to reduced user retention and limited impact. Traditional mood tracking and journaling tools are mostly passive, failing to provide intelligent feedback or meaningful emotional insights.
+---
 
-There is a growing need for an AI-powered, gamified wellness platform that can help users track their moods, analyze dreams, and receive personalized emotional insights while keeping them engaged through interactive, game-based environments.
+## 🧠 Problem Statement
 
-The proposed system, AURA, aims to fill this gap by combining AI-driven emotion detection, dream interpretation, and gamified visualization to make emotional self-care interactive, reflective, and sustainable.
+Mental health has become a major concern in today’s fast-paced, digitally connected world — especially among younger generations.  
+While existing wellness platforms and apps help track moods or offer therapy, they often **lack personalization, interactivity, and emotional engagement**, leading to low user retention and limited impact.
 
-Description
+There is a need for an **AI-powered, gamified wellness platform** that helps users:
+- Track their moods,
+- Analyze dreams, and
+- Receive personalized emotional insights  
 
-AURA is an innovative mental wellness platform that integrates AI, gamification, and emotional intelligence to help users build better awareness of their emotions through mood tracking, journaling, and dream analysis.
+— all while staying emotionally engaged through play and reflection.
 
-The platform features a Minecraft-style visual world, where the environment dynamically evolves based on the user’s emotional state — for example, a calm mood generates serene environments, while anxiety may create cloudy or foggy visuals. Users can complete daily wellness quests, log their mood entries, and record their dream narratives, which are analyzed by an AI model trained using the GoEmotions dataset (28 emotional categories).
+**AURA** aims to fill this gap by combining **AI-driven emotion detection**, **dream interpretation**, and **interactive visualization** in a gamified, emotionally intelligent environment.
 
-Unlike static wellness trackers, AURA transforms emotional reflection into an interactive experience. Users earn rewards such as MoodBlocks and LucidPoints for consistent journaling and task completion. They can also form 2-player mood parties to face symbolic “Stress Monsters” — representations of internal struggles like anxiety or procrastination — in cooperative gameplay that promotes emotional resilience.
+---
 
-The application includes AI-driven dream interpretation, mood-based journaling insights, and emotion-specific community villages (e.g., Sadland, JoyJump, Anxityria) that connect users with others experiencing similar emotions, fostering empathy and shared healing.
+## 🌟 Description
 
-AURA leverages React.js for the frontend, Node.js and Express.js for backend APIs, and FastAPI/Python for mood and dream analysis. Instead of Flask, the AI botserver uses a custom-trained GoEmotions model to classify emotions from journal text. Databases such as Firebase Firestore and MongoDB Atlas handle mood logs, chat history, and user progress data.
+**AURA** is an **AI-powered, gamified mental wellness platform** that helps users understand and regulate their emotions through:
+- **Mood Tracking**
+- **Dream Journaling**
+- **AI Emotional Analysis**
+- **Symbolic, Interactive Visualization**
 
-By merging emotional intelligence, storytelling, and gamified interaction, AURA offers a holistic, AI-assisted approach to emotional self-care, encouraging reflection, self-discovery, and consistent mental wellness engagement.
+The platform features a **Minecraft-style MoodWorld**, where the environment dynamically evolves based on the user’s emotional state — for example:
+- Calm → serene environments 🌊  
+- Anxiety → foggy skies 🌫️  
+- Joy → blooming forests 🌸  
 
-Application Flowchart
+Users can log daily moods, record dreams, and receive emotional insights from a **custom-trained AI model** based on the **GoEmotions dataset (28 moods)**.
 
-Below is the flow of operations within the AURA system:
+Unlike traditional mental health tools, AURA transforms emotional reflection into a **playful experience**.  
+Users earn **MoodBlocks** and **LucidPoints** for consistent journaling, complete daily tasks, and can form **2-player mood parties** to face symbolic monsters (like *Anxietron* or *Procrastinodon*) in cooperative gameplay that represents overcoming internal struggles.
 
-             ┌──────────────────────────────┐
-             │        User Interface         │
-             │  (React.js, Tailwind, MUI)   │
-             └──────────────┬───────────────┘
-                            │
-              ┌─────────────┴─────────────┐
-              │     Authentication        │
-              │   (Firebase Auth System)  │
-              └─────────────┬─────────────┘
-                            │
-        ┌───────────────────┴───────────────────┐
-        │        Core Backend (Node.js)         │
-        │  Handles user APIs, tasks, rewards    │
-        └───────────────────┬───────────────────┘
-                            │
-        ┌───────────────────┴───────────────────┐
-        │         AI Engine (FastAPI)           │
-        │  → Mood Detection (GoEmotions - 28)   │
-        │  → Dream Interpretation (RAG + NLP)   │
-        │  → Emotional Feedback Generation       │
-        └───────────────────┬───────────────────┘
-                            │
-        ┌───────────────────┴───────────────────┐
-        │          Database Layer               │
-        │ Firebase Firestore + MongoDB Atlas    │
-        │ Store user data, moods, dreams, chats │
-        └───────────────────┬───────────────────┘
-                            │
-        ┌───────────────────┴───────────────────┐
-        │     Visualization Engine (MoodWorld)  │
-        │  Minecraft-style environment updates  │
-        │  Reflects mood states in real time    │
-        └───────────────────┬───────────────────┘
-                            │
-        ┌───────────────────┴───────────────────┐
-        │ Multiplayer & Community System        │
-        │  2-Player Parties, Chat Villages      │
-        │  (Socket.io + Firebase Realtime DB)   │
-        └───────────────────────────────────────┘
+In addition, AURA offers:
+- **AI-powered dream interpretation**
+- **Emotion-based support villages** (e.g., *Sadland*, *JoyJump*)
+- **Anonymous chat communities**
+- **Mood-adaptive visual feedback**
 
-Key Highlights
+Together, these features make **emotional awareness fun, personalized, and sustainable**.
 
-AI Mood Detection – Emotion classification model trained on the GoEmotions dataset (28 moods).
+---
 
-Gamified Wellness – Emotional states represented through a dynamic world with quests and symbolic gameplay.
+## ⚙️ Tech Stack
 
-Dream Analysis – RAG-based dream interpretation provides personalized emotional insights.
+| Layer | Technologies Used |
+|-------|--------------------|
+| **Frontend** | React.js, Tailwind CSS, Material UI, TypeScript |
+| **Backend** | Node.js, Express.js |
+| **AI Engine** | Python (FastAPI) with GoEmotions Model |
+| **Database** | Firebase Firestore, MongoDB Atlas |
+| **Realtime Systems** | Socket.io, Firebase Realtime Database |
+| **Authentication** | Firebase Auth |
+| **Visualization** | Unity WebGL / 2D Canvas (MoodWorld) |
+| **NLP Models** | Gemini API / RAG for Dream Analysis |
 
-Community Healing – Emotion-based chat villages encourage social connection and empathy.
+---
 
-Reward System – Earn XP, MoodBlocks, and LucidPoints for maintaining consistent wellness habits.
+## 🧩 System Architecture & Flow
 
-Data Security – Firebase and MongoDB ensure encrypted, structured data management.
+Below is the overall flow of the AURA system:
+![AURA Flowchart](/Aura/image.png)
+
+![AURA Flowchart](/aura/image.png)
