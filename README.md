@@ -54,12 +54,11 @@ Together, these features make **emotional awareness fun, personalized, and susta
 |-------|--------------------|
 | **Frontend** | React.js, Tailwind CSS, Material UI, TypeScript |
 | **Backend** | Node.js, Express.js |
-| **AI Engine** | Python (FastAPI) with GoEmotions Model |
+| **AI Engine** | Python  with GoEmotions Model |
 | **Database** | Firebase Firestore, MongoDB Atlas |
 | **Realtime Systems** | Socket.io, Firebase Realtime Database |
 | **Authentication** | Firebase Auth |
-| **Visualization** | Unity WebGL / 2D Canvas (MoodWorld) |
-| **NLP Models** | Gemini API / RAG for Dream Analysis |
+| **NLP Models** | RAG for Dream Analysis |
 
 ---
 
