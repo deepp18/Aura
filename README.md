@@ -55,8 +55,8 @@ Together, these features make **emotional awareness fun, personalized, and susta
 | **Frontend** | React.js, Tailwind CSS, Material UI, TypeScript |
 | **Backend** | Node.js, Express.js |
 | **AI Engine** | Python  with GoEmotions Model |
-| **Database** | Firebase Firestore, MongoDB Atlas |
-| **Realtime Systems** | Socket.io, Firebase Realtime Database |
+| **Database** | MongoDB Atlas |
+| **Realtime Systems** | Socket.io |
 | **Authentication** | Firebase Auth |
 | **NLP Models** | RAG for Dream Analysis |
 
