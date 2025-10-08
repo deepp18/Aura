@@ -66,4 +66,4 @@ Together, these features make **emotional awareness fun, personalized, and susta
 
 Below is the overall flow of the AURA system:
 
-![AURA Flowchart](/image.png)
+![AURA Flowchart](/image.png.jpg)
