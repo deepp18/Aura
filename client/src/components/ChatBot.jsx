@@ -10,7 +10,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import Markdown from "react-markdown";
 
-const BACKEND_URL = "http://localhost:8000/api/predict"; // your Flask backend
+const BACKEND_URL = "http://localhost:8000/api/predict";
 
 const StaggeredDropDown = () => {
   const [msg, setMsg] = useState("");
@@ -45,12 +45,12 @@ const StaggeredDropDown = () => {
       let reply = "";
 
       if (data?.emotions && Array.isArray(data.emotions)) {
-        reply = `Detected: ${data.emotions.join(", ")}`;
+        reply = ` ${data.emotions.join(", ")}`;
       } else if (data?.message) {
         reply = data.message;
       } else {
         reply = JSON.stringify(data);
-      }
+      } 
       addMessage({ msg: reply, type: "bot" });
     } catch (err) {
       console.error(err);
@@ -71,13 +71,22 @@ const StaggeredDropDown = () => {
   };
 
   return (
-    <div className="flex items-center justify-center">
-      <motion.div animate={isBotOpen ? "open" : "closed"} className="relative">
+    <div>
+      {/* Controller: toggles between "closed" and "open" */}
+      <motion.div
+        initial="closed"
+        animate={isBotOpen ? "open" : "closed"}
+        className="pointer-events-none"
+      >
+        {/*
+          PANEL
+          - Final position: fixed at bottom-right (right-6 bottom-6)
+          - closed state: starts off-screen (bottom-left area) and scales/ fades in to final
+        */}
         <motion.ul
-          initial={wrapperVariants.closed}
-          variants={wrapperVariants}
-          style={{ originY: "bottom", translateX: "-50%" }}
-          className="flex flex-col gap-2 p-2 rounded-lg bg-white shadow-xl absolute bottom-[120%] left-[-100px] w-[20rem] overflow-hidden"
+          variants={panelVariants}
+          style={{ originY: 0.5, originX: 0.5 }}
+          className="flex flex-col gap-2 p-2 rounded-2xl bg-white shadow-xl fixed right-1 bottom-6 w-[20rem] overflow-hidden pointer-events-auto"
         >
           <div className="w-full h-full flex flex-col gap-2">
             <Option
@@ -90,9 +99,11 @@ const StaggeredDropDown = () => {
                 {msgList.map((m, i) => (
                   <div
                     key={i}
-                    className={`${m.type === "user" ? "self-end" : "self-start"} w-[70%]`}
+                    className={`${
+                      m.type === "user" ? "self-end" : "self-start"
+                    } w-[70%]`}
                   >
-                    <div className="border rounded-xl flex flex-col items-start justify-center p-2.5 break-words">
+                    <div className="border rounded-2xl flex flex-col items-start justify-center p-2.5 break-words bg-gray-50">
                       <div
                         className={`${
                           m.type === "user" ? "text-blue-700" : "text-slate-700"
@@ -109,7 +120,7 @@ const StaggeredDropDown = () => {
             <Divider />
             <motion.li
               variants={itemVariants}
-              className="flex items-center justify-between gap-2 w-full p-2 font-bold rounded-md text-slate-700"
+              className="flex items-center justify-between gap-2 w-full p-2 font-bold rounded-2xl text-slate-700"
             >
               <TextField
                 variant="outlined"
@@ -119,21 +130,26 @@ const StaggeredDropDown = () => {
                 onChange={(e) => setMsg(e.target.value)}
                 onKeyDown={handleKey}
                 disabled={loading}
+                InputProps={{ style: { borderRadius: 16 } }}
               />
-              <IconButton onClick={sendMessage} disabled={loading}>
+              <IconButton onClick={sendMessage} disabled={loading} className="rounded-2xl">
                 <SendIcon style={{ fontSize: 25, color: "black" }} />
               </IconButton>
             </motion.li>
           </div>
         </motion.ul>
-        <button
+
+        {/* Floating Icon (keeps its original left-bottom spot). */}
+        <motion.button
           onClick={toggleBot}
-          className="flex items-center gap-2 w-16 h-16 justify-center p-4 rounded-full text-indigo-50 bg-indigo-500 hover:bg-indigo-600 transition-colors fixed left-6 bottom-6 shadow-lg"
+          variants={iconParentVariants}
+          animate={isBotOpen ? "open" : "closed"}
+          className="flex items-center gap-2 w-16 h-16 justify-center p-4 rounded-full text-indigo-50 bg-indigo-500 hover:bg-indigo-600 transition-colors fixed left-6 bottom-6 shadow-lg pointer-events-auto"
         >
           <motion.span variants={iconVariants}>
             <RiRobot2Fill style={{ fontSize: 30, color: "white" }} />
           </motion.span>
-        </button>
+        </motion.button>
       </motion.div>
     </div>
   );
@@ -151,12 +167,48 @@ const Option = ({ text, Icon }) => (
 
 export default StaggeredDropDown;
 
-const wrapperVariants = {
-  open: { scaleY: 1, transition: { when: "beforeChildren", staggerChildren: 0.1 } },
-  closed: { scaleY: 0, transition: { when: "afterChildren", staggerChildren: 0.1 } },
+/* ==========================
+   Animation / Variants
+   ==========================
+   We animate the panel from the bottom-left off-screen into the final
+   bottom-right fixed position. Tweak CLOSED_X / CLOSED_Y if you want
+   the start point closer/further from the screen corner.
+*/
+
+
+const CLOSED_Y = 200; // how far below screen it starts (increase for more distance)
+
+const panelVariants = {
+  closed: {
+    scale: 0.8,
+    y: CLOSED_Y,
+    opacity: 0,
+    transition: { type: "spring", stiffness: 500, damping: 40 },
+  },
+  open: {
+    scale: 1,
+    y: 0,
+    opacity: 1,
+    transition: { type: "spring", stiffness: 140, damping: 22, mass: 0.8,delay:0.1 },
+  },
 };
+
+
+const iconParentVariants = {
+  closed: { scale: 1, transition: { type: "spring", stiffness: 260, damping: 20 } },
+  open: {
+    scale: 1.02,
+    transition: { yoyo: Infinity, duration: 0.8 },
+  }, // subtle pulse while open
+};
+
 const iconVariants = { open: { rotate: 180 }, closed: { rotate: 0 } };
+
 const itemVariants = {
-  open: { opacity: 1, y: 0, transition: { when: "beforeChildren" } },
-  closed: { opacity: 0, y: -15, transition: { when: "afterChildren" } },
+  open: {
+    opacity: 1,
+    y: 0,
+    transition: { when: "beforeChildren", staggerChildren: 0.06 },
+  },
+  closed: { opacity: 0, y: -10, transition: { when: "afterChildren" } },
 };

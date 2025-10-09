@@ -216,7 +216,7 @@ function Profile() {
                         {user.bio}
                       </div>
                       <div className='w-full break-words text-base font-semibold text-black text-opacity-50 tracking-wide'>
-                        Monthly Income: {user.monthlyIncome}
+                        
                       </div>
                     </>
                   ) : (

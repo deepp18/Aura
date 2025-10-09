@@ -3,7 +3,7 @@ import React from "react";
 
 const lessonContent = {
   budgeting: {
-    title: "Budgeting Basics",
+    title: "Budgeting B",
     content:
       "Budgeting is the process of creating a plan to spend your money. It helps you prioritize your spending and track your expenses.",
     videoLink: "https://www.youtube.com/embed/your-budgeting-video-id",
@@ -24,8 +24,8 @@ function Lesson() {
         <iframe
           width="702"
           height="395"
-          src="https://www.youtube.com/embed/g1Xth5XVobg?list=PLnYt61Ja2yQ9k-0LRO58a_I2Q0ZH2wYE4"
-          title="Session 1 - What is  a Budget? (Budgeting Basics)"
+          src="https://www.youtube.com/watch?v=zoCiHlFjo04&utm_source=chatgpt.com"
+          title="Session 1 - Name It to Tame It: How to Process Emotions 1/30"
           frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowfullscreen

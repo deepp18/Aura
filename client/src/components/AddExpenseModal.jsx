@@ -10,43 +10,38 @@ import { toast } from 'react-toastify';
 import Api from '../api';
 
 const AddExpenseModal = ({ open, handleClose, user, setChange, change }) => {
-    const paymentOptions = ['Cash', 'Credit Card', 'Debit Card', 'UPI', 'Online Transfer']
+    
     const [description, setDescription] = useState('')
-    const [amount, setAmount] = useState('')
-    const [paymentMethod, setPaymentMethod] = useState('')
-    const [paidTo, setPaidTo] = useState('')
+    
     const [date, setDate] = useState('')
 
     const addExpense = async () => {
-        if (description === '' || amount === '' || paymentMethod === '' || paidTo === '' || date === '') {
+        if (description === ''  || date === '') {
             toast.error('Please fill all the fields!')
             return
         }
         await Api.addExpense({
             email: user.email,
             expense: {
-                paid_to: paidTo,
+                
                 description: description,
-                amount: amount,
-                payment_method: paymentMethod,
+              
                 date: date
             }
         })
             .then((res) => {
                 console.log(res.data)
                 setDescription('')
-                setAmount('')
-                setPaymentMethod('')
-                setPaidTo('')
+                
                 setDate('')
-                setPaymentMethod('')
+               
                 handleClose()
                 setChange(!change)
-                toast.success('Expense Added Successfully!')
+                toast.success('Task Added Successfully!')
             })
             .catch((err) => {
                 console.log(err)
-                toast.error('Failed to add Expense!')
+                toast.error('Failed to add Task!')
             })
     }
 
@@ -59,50 +54,21 @@ const AddExpenseModal = ({ open, handleClose, user, setChange, change }) => {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {"Add New Expense"}
+                    {"Add New Task"}
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         <TextField
                             id="outlined-basic"
-                            label="Expense Description"
+                            label="Task Description"
                             variant="outlined"
                             margin="normal"
                             fullWidth
                             onChange={(e) => setDescription(e.target.value)}
                         />
-                        <TextField
-                            id="outlined-basic"
-                            label="Amount"
-                            variant="outlined"
-                            margin="normal"
-                            type='number'
-                            fullWidth
-                            onChange={(e) => setAmount(e.target.value)}
-                        />
-                        <TextField
-                            id="outlined-basic"
-                            label="Paid To"
-                            variant="outlined"
-                            margin="normal"
-                            fullWidth
-                            onChange={(e) => setPaidTo(e.target.value)}
-                        />
-                        <TextField
-                            id="outlined-basic"
-                            label="Payment Method"
-                            variant="outlined"
-                            margin="normal"
-                            fullWidth
-                            select
-                            onChange={(e) => setPaymentMethod(e.target.value)}
-                        >
-                            {paymentOptions.map((option) => (
-                                <MenuItem key={option} value={option}>
-                                    {option}
-                                </MenuItem>
-                            ))}
-                        </TextField>
+                        
+                      
+                            
                         <TextField
                             id="outlined-basic"
                             label="Date"
