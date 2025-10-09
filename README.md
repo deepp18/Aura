@@ -1,87 +1,69 @@
-# Financial Literacy Gamification
-## Problem Statement
-"The sooner we start, the better it is for our financial future."
-Financial literacy is crucial for individuals of all ages, yet traditional financial education often fails to engage young learners and those from non-financial backgrounds. This lack of engagement results in poor knowledge retention and limited practical application of financial concepts.
-Despite the critical importance of financial literacy, many individuals find traditional financial education tools unengaging and difficult to understand, leading to low user engagement and limited practical application of financial concepts. There is a need for an interactive, user-friendly platform that not only educates users on financial topics but also keeps them engaged through gamification and thematic design. Additionally, users require real-time support and resources to enhance their learning experience and facilitate the practical application of financial knowledge.
+# 🌈 AURA: An Intelligent, Gamified System for Mood Tracking and Dream-Based Emotional Analysis
 
-## Description
-Financial Literacy Gamification is an innovative financial web application with a unique Minecraft-themed interface(Game Interface), featuring expert sessions, blogs, and financial to-do lists, Stock price analysis games, and 2 players parties for Pair programming. Rewards System to boost confidence and increase engagement. Interactive gaming experience where users can form 2-player parties to battle monsters and earn rewards for task completion. The application includes a real-time profile dashboard with charts and a rewards shop offering skins and potions with a competitive Leaderboard.
-Users can get to know the expert sessions and can follow the same where interactive sessions with polls and live Q&A will be conducted. Daily todo will be provided with daily quizzes and daily tasks which which will contain quizzes 50 % from the articles that will be provided and 50 % random.
-Integrated a personal assistant chatbot and a Financial document chat support where users can upload the docs and chat or get to know the insights of the docs with stored chat history. Used Mistral for seamless user support, RAG, Qdrant vector DB, and created a stock market analysis game designed to enhance investment skills for users with no prior finance knowledge.
+> “Mental wellness begins with understanding one’s own emotions.”
 
-## Application Flowchart
-![image](https://github.com/user-attachments/assets/3f54343a-b9be-44cb-8843-6e3a00533125)
+---
 
+## 🧠 Problem Statement
 
-## Tech Stack
-- **React Js**: Frontend Development Framework
-- **Node Js, Express Js, Flask, FastApi**: Backend Development Framework
-- **Web-Rtc TypeScript**: Video Streaming and chatting with live Q&A
-- **yfinance**: Latest Stock shares information.
-- **NLP and RAG for making daily Q&A**: Daily Q&A for financial knowledge.
-- **Gemini**: Language model used for natural language processing tasks.
-  
-## Installation Steps
+Mental health has become a major concern in today’s fast-paced, digitally connected world — especially among younger generations.  
+While existing wellness platforms and apps help track moods or offer therapy, they often **lack personalization, interactivity, and emotional engagement**, leading to low user retention and limited impact.
 
-### Frontend
-1. Rename all `.env.sample` files to `.env` and fill in the required data.
-2. Install dependencies: `npm install`
-3. Start the development server: `npm run dev`
- 
-### Backend
-1. Navigate to the server directory: `cd server`
-2. Install dependencies: `npm install`
-3. Start the development server: `npm start`
+There is a need for an **AI-powered, gamified wellness platform** that helps users:
+- Track their moods,
+- Analyze dreams, and
+- Receive personalized emotional insights  
 
-### Flask Server
-1. Set up a conda environment with Python 3.10.
-2. Navigate to the chatbot directory: `cd botserver`
-3. Install dependencies: `pip install -r requirements.txt`
-4. Run the Flask app: `python app.py`
+— all while staying emotionally engaged through play and reflection.
 
-## Libraries and Dependencies
-### Frontend
-- `Material UI`
-- `Framer motion`
-- `Tailwind`
-- `mui-one-time-password-input`
-- `TypeScript`
-- `mui-one-time-password-input`
-- `Redux`
+**AURA** aims to fill this gap by combining **AI-driven emotion detection**, **dream interpretation**, and **interactive visualization** in a gamified, emotionally intelligent environment.
 
-### Node Server
-- `cors`
-- `twillio`
-  
-### Flask
-- `Gemini`
-- `flask_cors`
-- `yfinance`
+---
 
-### Database
-- `MongoDb Atlas`
+## 🌟 Description
 
-## Overview Video
-[Video Demo](https://youtu.be/vsDuyJISPx0)
+**AURA** is an **AI-powered, gamified mental wellness platform** that helps users understand and regulate their emotions through:
+- **Mood Tracking**
+- **Dream Journaling**
+- **AI Emotional Analysis**
+- **Symbolic, Interactive Visualization**
 
+The platform features a **Minecraft-style MoodWorld**, where the environment dynamically evolves based on the user’s emotional state — for example:
+- Calm → serene environments 🌊  
+- Anxiety → foggy skies 🌫️  
+- Joy → blooming forests 🌸  
 
-## Features
-1. **Minecraft-Themed Interface**: A visually appealing, game-like interface that makes financial learning enjoyable and engaging.
-2. **Expert Sessions**: Live interactive sessions with financial experts, including polls and Q&A segments, to enhance learning and provide real-time support.
-3. **Blogs and Articles**: A library of articles and blog posts covering various financial topics to provide users with a wealth of information.
-4. **Financial To-Do Lists**: Daily and weekly to-do lists that guide users through practical financial tasks and learning activities.
-5. **Stock Market Analysis Game**: A game designed for users with no prior finance knowledge to enhance their investment skills through simulated stock market activities.
-6. **2-Player Gaming Parties**: Users can form pairs to complete tasks and battle monsters, encouraging collaborative learning and engagement.
-7. **Reward System**: Earn rewards for completing tasks and participating in activities, boosting user confidence and engagement.
-8. **Profile Dashboard**: A real-time dashboard displaying user progress, achievements, and personalized charts.
-9. **Rewards Shop**: Users can redeem earned rewards for skins, potions, and other items, enhancing the gaming experience.
-10. **Competitive Leaderboard**: A leaderboard that fosters healthy competition among users by displaying top performers.
-11. **Daily Quizzes and Tasks**: Daily quizzes and tasks, with questions derived 50% from provided articles and 50% randomly, to reinforce learning and encourage regular participation.
-12. **Personal Assistant Chatbot**: A chatbot powered by Mistral for seamless user support, providing assistance and answering queries in real time.
-13. **Financial Document Chat Support**: Users can upload financial documents and chat with the assistant to gain insights and receive explanations, with stored chat history for future reference.
-14. **Interactive Gaming Experience**: Engaging game mechanics where users can battle monsters and complete tasks for rewards, enhancing the learning process through gamification.
-15. **Resource Library**: A collection of resources, including videos, articles, and interactive tools, to support users in their financial education journey.
-16. **AI Financial Assistant Chatbot:** Powered by the Gemini API, provides on-demand advice tailored to each user's past interactions.
-17. **Personalized Investment Portfolio:** AI-driven portfolio recommendations based on income, goals, and risk tolerance.
-18. **Expense Tracker:** Input and analyze expenses, with suggestions on reducing unnecessary spending via a dedicated chatbot.
-19. **Expert Sessions:** Live sessions with financial experts, featuring real-time polls and Q&A.
+Users can log daily moods, record dreams, and receive emotional insights from a **custom-trained AI model** based on the **GoEmotions dataset (28 moods)**.
+
+Unlike traditional mental health tools, AURA transforms emotional reflection into a **playful experience**.  
+Users earn **MoodBlocks** and **LucidPoints** for consistent journaling, complete daily tasks, and can form **2-player mood parties** to face symbolic monsters (like *Anxietron* or *Procrastinodon*) in cooperative gameplay that represents overcoming internal struggles.
+
+In addition, AURA offers:
+- **AI-powered dream interpretation**
+- **Emotion-based support villages** (e.g., *Sadland*, *JoyJump*)
+- **Anonymous chat communities**
+- **Mood-adaptive visual feedback**
+
+Together, these features make **emotional awareness fun, personalized, and sustainable**.
+
+---
+
+## ⚙️ Tech Stack
+
+| Layer | Technologies Used |
+|-------|--------------------|
+| **Frontend** | React.js, Tailwind CSS, Material UI, TypeScript |
+| **Backend** | Node.js, Express.js |
+| **AI Engine** | Python  with GoEmotions Model |
+| **Database** | MongoDB Atlas |
+| **Realtime Systems** | Socket.io |
+| **Authentication** | Firebase Auth |
+| **NLP Models** | RAG for Dream Analysis |
+
+---
+
+## 🧩 System Architecture & Flow
+
+Below is the overall flow of the AURA system:
+
+![AURA Flowchart](/image.png.jpg)
