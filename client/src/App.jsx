@@ -53,7 +53,7 @@ import "./App.css";
 const navigation = [
   { name: "Home", href: "/home" },
   { name: "Tasks", href: "/tasks" },
-  { name: "Games", href: "/party" },
+  { name: "Party", href: "/party" },
   { name: "Villages", href: "/stock" },
   { name: "Meditation", href: "/learning" },
 ];

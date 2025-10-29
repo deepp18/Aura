@@ -8,7 +8,6 @@ import ShieldIcon from '@mui/icons-material/Shield';
 import StarIcon from '@mui/icons-material/Star';
 import Bar from './Bar';
 
-
 const AvatarComp = ({ image, user }) => {
     const [health, setHealth] = useState(50);
 
@@ -19,11 +18,11 @@ const AvatarComp = ({ image, user }) => {
 
     return (
         <div className='w-full h-full flex flex-col items-start gap-4'>
-            <div className='text-3xl font-bold text-main-purp'>
+            <div className='text-3xl font-bold text-white'>
                 Your Avatar
                 {/* <span>
                     <IconButton onClick={increaseHealth}>
-                        <SettingsIcon className='!text-3xl' />
+                        <SettingsIcon className='!text-3xl text-white' />
                     </IconButton>
                 </span> */}
             </div>
@@ -34,19 +33,33 @@ const AvatarComp = ({ image, user }) => {
                     className='w-[30%] h-[30%]'
                 />
                 <div className='w-[60%] flex flex-col items-start gap-4'>
-                    <div className='w-full flex flex-col gap-2 p-1'>
-                        <Bar name='Health' icon={<FavoriteIcon className='text-red-600' />} value={user.gaming.health} maxValue={user.gaming.maxHealth} desc="The Health Bar indicates your health, Once it goes below 0 your level will be lowered!" barstyle="bg-red-600" />
-                        <Bar name='Experience' icon={<StarIcon className='text-yellow-600' />} value={user.gaming.exp} maxValue={user.gaming.maxExp} desc="The Experience Bar indicates your experience, Once it goes above the maximum value you will level up!!" barstyle="bg-yellow-600" />
+                    <div className='w-full flex flex-col gap-2 p-1 '>
+                        <Bar
+                    name={<span className="text-white">Health</span>}
+                    icon={<FavoriteIcon className="text-red-500" />}
+                    value={user.gaming.health}
+                    maxValue={user.gaming.maxHealth}
+                    desc="The Health Bar indicates your health. Once it goes below 0 your level will be lowered!"
+                    barstyle="bg-red-600"
+/>
+                        <Bar
+                            name={<span className="text-white">Experience</span>}
+                            icon={<StarIcon className='text-yellow-400' />}
+                            value={user.gaming.exp}
+                            maxValue={user.gaming.maxExp}
+                            desc="The Experience Bar indicates your experience. Once it goes above the maximum value you will level up!"
+                            barstyle="bg-yellow-500"
+                        />
                     </div>
                     <div className='w-full flex items-center justify-between'>
                         <div className='flex items-center'>
-                            <Tooltip arrow title="This is your current health and title">
+                            <Tooltip arrow title="This is your current level and title">
                                 <IconButton>
-                                    <ShieldIcon className='text-[#06447c] !text-3xl' />
+                                    <ShieldIcon className='text-yellow-400 !text-3xl' />
                                 </IconButton>
                             </Tooltip>
-                            <span className='text-[#06447c] font-bold tracking-wide'>
-                                Level {user.gaming.level} ({"#" +user.title})
+                            <span className='text-white font-bold tracking-wide'>
+                                Level {user.gaming.level} ({"#" + user.title})
                             </span>
                         </div>
                         <div className='flex'>
@@ -54,11 +67,11 @@ const AvatarComp = ({ image, user }) => {
                                 <span>
                                     <Tooltip arrow title="You can use these coins to buy powerups and potions from the shop!">
                                         <IconButton>
-                                            <MonetizationOnIcon className='text-[#FF9900] !text-3xl' />
+                                            <MonetizationOnIcon className='text-yellow-400 !text-3xl' />
                                         </IconButton>
                                     </Tooltip>
                                 </span>
-                                <span className='font-bold text-[#FF9900] text-lg'>
+                                <span className='font-bold text-yellow-400 text-lg'>
                                     {user.coins}
                                 </span>
                             </div>
@@ -66,11 +79,11 @@ const AvatarComp = ({ image, user }) => {
                                 <span>
                                     <Tooltip arrow title="Gems, unlike coins, are rare and hold even more value. Use them wisely!">
                                         <IconButton>
-                                            <DiamondIcon className='text-[#50C878] !text-3xl' />
+                                            <DiamondIcon className='text-emerald-400 !text-3xl' />
                                         </IconButton>
                                     </Tooltip>
                                 </span>
-                                <span className='font-bold text-[#50C878] text-lg'>
+                                <span className='font-bold text-emerald-400 text-lg'>
                                     {user.gems}
                                 </span>
                             </div>

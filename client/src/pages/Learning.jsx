@@ -6,9 +6,9 @@ import Lesson2 from "../components/lesson2";
 import QuestionsForm1 from "../components/QandA/Finance";
 import QuestionsForm from "../components/QandA/Invest";
 import QuestionsForm2 from "../components/QandA/Budgeting.jsx";
-import BudgetingImage from "../assets/budget.jpg";
-import fin from "../assets/fin.jpg";
-import invest from "../assets/invest.jpg";
+import BudgetingImage from "../assets/img1_emotion.png";
+import fin from "../assets/img2_mindfulness.png";
+import invest from "../assets/img3_dealing_with_stress.png";
 import { Home, QuestionAnswerRounded } from "@mui/icons-material";
 import BlogHome from "./BlogHome.jsx";
 

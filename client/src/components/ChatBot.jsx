@@ -90,7 +90,7 @@ const StaggeredDropDown = () => {
         >
           <div className="w-full h-full flex flex-col gap-2">
             <Option
-              Icon={<AiFillRobot style={{ fontSize: 25, color: "black" }} />}
+              Icon={<AiFillRobot style={{ fontSize: 25, color: "black"}} />}
               text="Chat Bot"
             />
             <Divider />
@@ -98,22 +98,29 @@ const StaggeredDropDown = () => {
               <div className="flex flex-col gap-2 h-full p-2">
                 {msgList.map((m, i) => (
                   <div
-                    key={i}
-                    className={`${
-                      m.type === "user" ? "self-end" : "self-start"
-                    } w-[70%]`}
-                  >
-                    <div className="border rounded-2xl flex flex-col items-start justify-center p-2.5 break-words bg-gray-50">
-                      <div
-                        className={`${
-                          m.type === "user" ? "text-blue-700" : "text-slate-700"
-                        } font-bold text-xs`}
-                      >
-                        {m.type === "user" ? "You" : "Chatbot"}
-                      </div>
-                      <Markdown>{m.msg}</Markdown>
-                    </div>
-                  </div>
+  key={i}
+  className={`${
+    m.type === "user" ? "self-end" : "self-start"
+  } w-[70%]`}
+>
+  <div
+    className={`border rounded-2xl flex flex-col items-start justify-center p-2.5 break-words ${
+      m.type === "user"
+        ? "bg-indigo-600 text-white"
+        : "bg-gray-800 text-gray-100"
+    }`}
+  >
+    <div
+      className={`font-bold text-xs ${
+        m.type === "user" ? "text-indigo-100" : "text-teal-300"
+      }`}
+    >
+      {m.type === "user" ? "You" : "Chatbot"}
+    </div>
+    <Markdown>{m.msg}</Markdown>
+  </div>
+</div>
+
                 ))}
               </div>
             </div>
@@ -144,7 +151,7 @@ const StaggeredDropDown = () => {
           onClick={toggleBot}
           variants={iconParentVariants}
           animate={isBotOpen ? "open" : "closed"}
-          className="flex items-center gap-2 w-16 h-16 justify-center p-4 rounded-full text-indigo-50 bg-indigo-500 hover:bg-indigo-600 transition-colors fixed left-6 bottom-6 shadow-lg pointer-events-auto"
+          className="flex items-center gap-2 w-16 h-16 justify-center p-4 rounded-full text-white bg-indigo-500 hover:bg-indigo-600 transition-colors fixed left-6 bottom-6 shadow-lg pointer-events-auto"
         >
           <motion.span variants={iconVariants}>
             <RiRobot2Fill style={{ fontSize: 30, color: "white" }} />
@@ -158,7 +165,7 @@ const StaggeredDropDown = () => {
 const Option = ({ text, Icon }) => (
   <motion.li
     variants={itemVariants}
-    className="flex items-center gap-2 w-full p-2 font-bold text-slate-700"
+    className="flex items-center gap-2 w-full p-2 font-bold text-yello"
   >
     {Icon}
     <span className="text-xl">{text}</span>
@@ -211,4 +218,4 @@ const itemVariants = {
     transition: { when: "beforeChildren", staggerChildren: 0.06 },
   },
   closed: { opacity: 0, y: -10, transition: { when: "afterChildren" } },
-};
+};  

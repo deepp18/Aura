@@ -43,13 +43,13 @@ const AddTaskModal = ({ open, handleClose, user, setChange, change }) => {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {"Add New Financial Habits"}
+                    {"Add New Tasks"}
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         <TextField
                             id="outlined-basic"
-                            label="Financial Habit Title"
+                            label="Task Title"
                             variant="outlined"
                             margin="normal"
                             fullWidth
@@ -57,7 +57,7 @@ const AddTaskModal = ({ open, handleClose, user, setChange, change }) => {
                         />
                         <TextField
                             id="outlined-basic"
-                            label="Financial Habit Description"
+                            label="Description"
                             variant="outlined"
                             margin="normal"
                             fullWidth

@@ -2,30 +2,32 @@ import React from "react";
 
 const lessonContent = {
   investing: {
-    title: "Investing Essentials",
-    content:
-      "Investing is the process of allocating money with the expectation of generating income or profit. It involves various assets such as stocks, bonds, real estate, and commodities.",
-    videoLink: "https://www.youtube.com/embed/your-investing-video-id",
+    title: "Mindfulness & Meditation Basics",
+    content: "Intro to breathing, calming the mind",
+    videoLink: "https://www.youtube-nocookie.com/embed/zK2TXgGu-GQ", // embed version
   },
 };
 
 function Lesson1() {
   return (
-    <div className="lesson-container mx-auto max-w-2xl p-4">
-      <h1 className="text-2xl font-bold mb-4">
+    <div className="lesson-container mx-auto max-w-2xl p-4 flex flex-col items-center justify-evenly">
+      <h1 className="text-2xl font-bold mb-4 hover:underline">
         {lessonContent.investing.title}
       </h1>
-      <p className="mb-4">{lessonContent.investing.content}</p>
+      <p className="mb-6 ring ring-gray p-4 rounded-xl shadow-md hover:shadow-xl hover:underline">
+        {lessonContent.investing.content}
+      </p>
 
       <div className="video-container mb-4">
         <iframe
           width="702"
           height="395"
-          src="https://www.youtube.com/embed/TLGalocqj00?list=PL8uhW8cclMiOa7d0IkBnkuNFsq7IUSlpl"
-          title="Top 5 Investment Strategies for Beginners | Investment Masterclass"
-          frameborder="0"
+          src={lessonContent.investing.videoLink}
+          title="Day 1: Headspace 'Basics 1' Meditation Session"
+          frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen
+          allowFullScreen
+          loading="lazy"
         ></iframe>
       </div>
 
@@ -33,7 +35,9 @@ function Lesson1() {
         <h2 className="text-lg font-semibold mb-2">Playlist</h2>
         <ul>
           <li>
-            <a href="#">Investing Essentials</a>
+            <a href="#" className="hover:underline">
+              Mindfulness & Meditation Basics
+            </a>
           </li>
         </ul>
       </div>

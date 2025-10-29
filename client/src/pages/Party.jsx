@@ -221,7 +221,7 @@ const Party = () => {
                                             </button>
                                         </div>
 
-                                        <div className='text-2xl font-bold'>Party Name: {partyInfo.partyName}</div>
+                                        <div className='text-2xl font-bold text-white'>Party Name: {partyInfo.partyName}</div>
                                         <div className='mt-2'>Party Leader: {partyInfo.members?.[0]?.name}</div>
 
                                         <div className='mt-6 w-full'>

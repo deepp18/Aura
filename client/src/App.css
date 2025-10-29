@@ -298,3 +298,38 @@ footer {
   .cta-group { display: none; }
   .navbar-inner { padding-left: 12px; padding-right: 12px; }
 }
+.left-6.bottom-6.fixed,
+.right-1.bottom-6.fixed,
+.right-1.bottom-6.fixed > * {
+  z-index: 99990 !important;
+}
+
+/* Specifically target the floating toggle button and the panel (ul) */
+.left-6.bottom-6.fixed {           /* the floating toggle button */
+  z-index: 99995 !important;
+}
+
+/* the chat panel (right-bottom) - make sure it overlays everything */
+.right-1.bottom-6.fixed {
+  z-index: 100000 !important;
+}
+
+/* pointer-events: keep panel interactive but keep parent animation layers non-blocking */
+.pointer-events-auto.fixed {
+  pointer-events: auto !important;
+}
+
+/* Safety: lower the z-index of known animated background items if they used z-indexs <= 50 */
+.absolute.animate-pulse,
+.-top-24,
+.-bottom-24,
+.z-10 {
+  z-index: 10 !important;
+}
+
+/* Optional: create a named class fallback if you decide to tweak JSX later */
+.chatbot-highlayer {
+  position: fixed !important;
+  z-index: 100000 !important;
+  pointer-events: auto !important;
+}

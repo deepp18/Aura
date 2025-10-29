@@ -3,10 +3,10 @@ import React from "react";
 
 const lessonContent = {
   budgeting: {
-    title: "Budgeting B",
+    title: "Name It to Tame It",
     content:
-      "Budgeting is the process of creating a plan to spend your money. It helps you prioritize your spending and track your expenses.",
-    videoLink: "https://www.youtube.com/embed/your-budgeting-video-id",
+      "Learning to name your emotions to gain control",
+    videoLink: "https://www.youtube.com/watch?v=zoCiHlFjo04",
   },
 };
 
@@ -22,14 +22,17 @@ function Lesson() {
 
       <div className="video-container mb-4">
         <iframe
-          width="702"
-          height="395"
-          src="https://www.youtube.com/watch?v=zoCiHlFjo04&utm_source=chatgpt.com"
-          title="Session 1 - Name It to Tame It: How to Process Emotions 1/30"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen
-        ></iframe>{" "}
+        
+            width="702"
+            height="395"
+            src="https://www.youtube-nocookie.com/embed/zoCiHlFjo04" 
+            title="Session 1 - Name It to Tame It: How to Process Emotions 1/30"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            loading="lazy"
+/>
+
       </div>
 
       {/* Playlist */}
@@ -39,7 +42,7 @@ function Lesson() {
           {/* You can add list items for different lessons here */}
           <li>
             <a href="#">
-              Budgeting Basics
+              Name It to Tame It
             </a>
           </li>
           {/* Add more lessons as needed */}
