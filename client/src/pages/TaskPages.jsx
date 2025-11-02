@@ -1,3 +1,4 @@
+// src/pages/TaskPages.jsx
 import React, { useState, useEffect } from 'react';
 import Center from '../animated-components/Center';
 import { CircularProgress, IconButton, Tooltip } from "@mui/material";
@@ -8,12 +9,6 @@ import Checkbox from '@mui/material/Checkbox';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
-
-/**
- * TaskPages (Aura theme) — refactored from "financial habits" to "mood & dream" tasks.
- * - Strings, tooltips, aria labels and empty-state messages updated
- * - Functional behavior unchanged
- */
 
 const TaskPages = () => {
   const [user, setUser] = useState();
@@ -48,6 +43,17 @@ const TaskPages = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [change]);
 
+  // 🔔 Listen for mood-chat adding tasks (cross-component refresh)
+  useEffect(() => {
+    const onStorage = (e) => {
+      if (e.key === 'tasksRefreshTick') {
+        setChange((c) => !c);
+      }
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
+
   const updateTask = async (task) => {
     try {
       await Api.setTaskStatus({ email: user.email, id: task._id });
@@ -58,8 +64,9 @@ const TaskPages = () => {
   };
 
   const formatDate = (dt) => {
+    if (!dt) return '—';
     const date = new Date(dt);
-    return date.toLocaleDateString();
+    return isNaN(date.getTime()) ? '—' : date.toLocaleDateString();
   };
 
   const handleDelete = async (task) => {
@@ -207,4 +214,3 @@ const TaskPages = () => {
 };
 
 export default TaskPages;
-

@@ -1,3 +1,4 @@
+// src/components/StaggeredDropDown.jsx
 import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BotOpen, isbotOpen } from "../redux/features/llmslice";
@@ -9,8 +10,10 @@ import { RiRobot2Fill } from "react-icons/ri";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Markdown from "react-markdown";
+import Api from "../api";
 
-const BACKEND_URL = "http://localhost:8000/api/predict";
+// ✅ Ask backend for JSON (so we can read emotion + tasks)
+const BACKEND_URL = "http://localhost:8000/api/predict?format=json";
 
 const StaggeredDropDown = () => {
   const [msg, setMsg] = useState("");
@@ -29,29 +32,128 @@ const StaggeredDropDown = () => {
 
   const addMessage = (msgObj) => setMsgList((prev) => [...prev, msgObj]);
 
+  // --- helpers: user + emotion utils ---
+  const getUserEmail = () => {
+    try {
+      const u = JSON.parse(localStorage.getItem("user"));
+      return u?.email || "";
+    } catch {
+      return "";
+    }
+  };
+
+  const titleCase = (s) => {
+    if (!s || typeof s !== "string") return "";
+    return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+  };
+
+  // Fallback: infer emotion from bot reply if backend didn't include it
+  const inferEmotionFromReply = (reply = "") => {
+    const r = reply.toLowerCase();
+    if (r.includes("angry")) return "anger";
+    if (r.includes("annoy")) return "annoyance";
+    if (r.includes("afraid") || r.includes("fear")) return "fear";
+    if (r.includes("nervous")) return "nervousness";
+    if (r.includes("grateful") || r.includes("gratitude")) return "gratitude";
+    if (r.includes("sad")) return "sadness";
+    if (r.includes("joy") || r.includes("happy")) return "joy";
+    if (r.includes("love")) return "love";
+    if (r.includes("curious")) return "curiosity";
+    if (r.includes("excite")) return "excitement";
+    if (r.includes("approve")) return "approval";
+    if (r.includes("remorse") || r.includes("sorry for")) return "remorse";
+    if (r.includes("relief") || r.includes("relieved")) return "relief";
+    if (r.includes("optimistic") || r.includes("hopeful")) return "optimism";
+    if (r.includes("proud")) return "pride";
+    if (r.includes("admire")) return "admiration";
+    if (r.includes("disgust")) return "disgust";
+    if (r.includes("disappoint")) return "disappointment";
+    if (r.includes("confus")) return "confusion";
+    if (r.includes("realiz")) return "realization";
+    if (r.includes("surprise") || r.includes("surprised")) return "surprise";
+    if (r.includes("desire") || r.includes("want")) return "desire";
+    if (r.includes("care") || r.includes("kind")) return "caring";
+    return "neutral";
+  };
+
+  // Parse bullets from legacy single-line bot text (if needed)
+  const parseTasksFromPlain = (text, emotion = "neutral") => {
+    const matches = Array.from(text.matchAll(/•\s+([^•]+)/g))
+      .map((m) => (m[1] || "").trim())
+      .filter(Boolean);
+    const now = new Date().toISOString();
+    const emo = titleCase(emotion);
+    return matches.map((title) => ({
+      title,
+      desc: `Auto from mood: ${emo}`,
+      isCompleted: false,
+      isAdminGenerated: true,
+      date: now,
+    }));
+  };
+
   const sendMessage = async () => {
     if (!msg.trim()) {
       toast.error("Message cannot be empty");
       return;
     }
+
     const userMsg = msg.trim();
     addMessage({ msg: userMsg, type: "user" });
     setMsg("");
     setLoading(true);
 
     try {
-      const res = await axios.post(BACKEND_URL, { text: userMsg });
+      // 1) call mood backend (JSON)
+      const res = await axios.post(
+        BACKEND_URL,
+        { text: userMsg },
+        { headers: { Accept: "application/json" } }
+      );
       const data = res.data;
-      let reply = "";
 
-      if (data?.emotions && Array.isArray(data.emotions)) {
-        reply = ` ${data.emotions.join(", ")}`;
-      } else if (data?.message) {
-        reply = data.message;
-      } else {
-        reply = JSON.stringify(data);
-      } 
+      const reply =
+        data?.reply ||
+        data?.message ||
+        (typeof data === "string" ? data : JSON.stringify(data));
+
       addMessage({ msg: reply, type: "bot" });
+
+      // 2) decide emotion (prefer backend, else infer)
+      const emotionRaw = data?.emotion || inferEmotionFromReply(reply);
+      const emotionPretty = titleCase(emotionRaw || "neutral");
+
+      // 3) pick up tasks (prefer JSON tasks; else parse bullets)
+      let tasks = Array.isArray(data?.tasks) ? data.tasks : [];
+      if (!tasks.length && typeof reply === "string") {
+        tasks = parseTasksFromPlain(reply, emotionRaw);
+      }
+
+      // 4) save tasks for current user (force desc = "Auto from mood: X")
+      const email = getUserEmail();
+      if (!email) {
+        console.warn("No user email found; cannot save tasks.");
+      } else {
+        for (const task of tasks) {
+          const safeTask = {
+            title: task.title || task.task || "Suggested task",
+            desc: `Complete your task today itself for maximum reward `, 
+            mood: emotionPretty, // << always from here
+            isCompleted: false,
+            isAdminGenerated:
+              typeof task.isAdminGenerated === "boolean"
+                ? task.isAdminGenerated
+                : true,
+            date: task.date || new Date().toISOString(),
+          };
+          await Api.addTask({ email, task: safeTask });
+        }
+
+        if (tasks.length) {
+          // 5) notify Tasks page to refresh
+          localStorage.setItem("tasksRefreshTick", String(Date.now()));
+        }
+      }
     } catch (err) {
       console.error(err);
       addMessage({
@@ -72,17 +174,11 @@ const StaggeredDropDown = () => {
 
   return (
     <div>
-      {/* Controller: toggles between "closed" and "open" */}
       <motion.div
         initial="closed"
         animate={isBotOpen ? "open" : "closed"}
         className="pointer-events-none"
       >
-        {/*
-          PANEL
-          - Final position: fixed at bottom-right (right-6 bottom-6)
-          - closed state: starts off-screen (bottom-left area) and scales/ fades in to final
-        */}
         <motion.ul
           variants={panelVariants}
           style={{ originY: 0.5, originX: 0.5 }}
@@ -90,7 +186,7 @@ const StaggeredDropDown = () => {
         >
           <div className="w-full h-full flex flex-col gap-2">
             <Option
-              Icon={<AiFillRobot style={{ fontSize: 25, color: "black"}} />}
+              Icon={<AiFillRobot style={{ fontSize: 25, color: "black" }} />}
               text="Chat Bot"
             />
             <Divider />
@@ -98,29 +194,26 @@ const StaggeredDropDown = () => {
               <div className="flex flex-col gap-2 h-full p-2">
                 {msgList.map((m, i) => (
                   <div
-  key={i}
-  className={`${
-    m.type === "user" ? "self-end" : "self-start"
-  } w-[70%]`}
->
-  <div
-    className={`border rounded-2xl flex flex-col items-start justify-center p-2.5 break-words ${
-      m.type === "user"
-        ? "bg-indigo-600 text-white"
-        : "bg-gray-800 text-gray-100"
-    }`}
-  >
-    <div
-      className={`font-bold text-xs ${
-        m.type === "user" ? "text-indigo-100" : "text-teal-300"
-      }`}
-    >
-      {m.type === "user" ? "You" : "Chatbot"}
-    </div>
-    <Markdown>{m.msg}</Markdown>
-  </div>
-</div>
-
+                    key={i}
+                    className={`${m.type === "user" ? "self-end" : "self-start"} w-[70%]`}
+                  >
+                    <div
+                      className={`border rounded-2xl flex flex-col items-start justify-center p-2.5 break-words ${
+                        m.type === "user"
+                          ? "bg-indigo-600 text-white"
+                          : "bg-gray-800 text-gray-100"
+                      }`}
+                    >
+                      <div
+                        className={`font-bold text-xs ${
+                          m.type === "user" ? "text-indigo-100" : "text-teal-300"
+                        }`}
+                      >
+                        {m.type === "user" ? "You" : "Chatbot"}
+                      </div>
+                      <Markdown>{m.msg}</Markdown>
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
@@ -146,7 +239,6 @@ const StaggeredDropDown = () => {
           </div>
         </motion.ul>
 
-        {/* Floating Icon (keeps its original left-bottom spot). */}
         <motion.button
           onClick={toggleBot}
           variants={iconParentVariants}
@@ -163,10 +255,7 @@ const StaggeredDropDown = () => {
 };
 
 const Option = ({ text, Icon }) => (
-  <motion.li
-    variants={itemVariants}
-    className="flex items-center gap-2 w-full p-2 font-bold text-yello"
-  >
+  <motion.li variants={itemVariants} className="flex items-center gap-2 w-full p-2 font-bold text-yello">
     {Icon}
     <span className="text-xl">{text}</span>
   </motion.li>
@@ -176,46 +265,22 @@ export default StaggeredDropDown;
 
 /* ==========================
    Animation / Variants
-   ==========================
-   We animate the panel from the bottom-left off-screen into the final
-   bottom-right fixed position. Tweak CLOSED_X / CLOSED_Y if you want
-   the start point closer/further from the screen corner.
-*/
-
-
-const CLOSED_Y = 200; // how far below screen it starts (increase for more distance)
+   ========================== */
+const CLOSED_Y = 200;
 
 const panelVariants = {
-  closed: {
-    scale: 0.8,
-    y: CLOSED_Y,
-    opacity: 0,
-    transition: { type: "spring", stiffness: 500, damping: 40 },
-  },
-  open: {
-    scale: 1,
-    y: 0,
-    opacity: 1,
-    transition: { type: "spring", stiffness: 140, damping: 22, mass: 0.8,delay:0.1 },
-  },
+  closed: { scale: 0.8, y: CLOSED_Y, opacity: 0, transition: { type: "spring", stiffness: 500, damping: 40 } },
+  open: { scale: 1, y: 0, opacity: 1, transition: { type: "spring", stiffness: 140, damping: 22, mass: 0.8, delay: 0.1 } },
 };
-
 
 const iconParentVariants = {
   closed: { scale: 1, transition: { type: "spring", stiffness: 260, damping: 20 } },
-  open: {
-    scale: 1.02,
-    transition: { yoyo: Infinity, duration: 0.8 },
-  }, // subtle pulse while open
+  open: { scale: 1.02, transition: { yoyo: Infinity, duration: 0.8 } },
 };
 
 const iconVariants = { open: { rotate: 180 }, closed: { rotate: 0 } };
 
 const itemVariants = {
-  open: {
-    opacity: 1,
-    y: 0,
-    transition: { when: "beforeChildren", staggerChildren: 0.06 },
-  },
+  open: { opacity: 1, y: 0, transition: { when: "beforeChildren", staggerChildren: 0.06 } },
   closed: { opacity: 0, y: -10, transition: { when: "afterChildren" } },
-};  
+};
