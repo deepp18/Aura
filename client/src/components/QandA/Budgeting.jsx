@@ -17,7 +17,7 @@ import {
   isbotOpen,
 } from "../../redux/features/llmslice";
 
-const QuestionsForm2 = () => {
+const QuestionsForm_Emotions = () => {
   var total = 0;
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState(Array(15).fill(""));
@@ -33,6 +33,7 @@ const QuestionsForm2 = () => {
   const dispatch = useDispatch();
   const inferenceResult = useSelector(selectInferenceResult);
   const isBotOpen = useSelector(isbotOpen);
+
   const toggleBot = () => {
     dispatch(BotOpen.actions.togglebot());
   };
@@ -46,42 +47,23 @@ const QuestionsForm2 = () => {
     dispatch(fetchLLMInference(msg));
   };
 
-  // useEffect(() => {
-  //   const callfirst = async () => {
-  //     await Api.checkQuiz({
-  //       email: userInfo.email,
-  //       lessonType: "business",
-  //     }).then((res) => {
-  //       if (res.data == "true") {
-  //         setCan(true);
-  //         toast.success("you can attempt this quiz only one time");
-  //       } else {
-  //         toast.error(
-  //           "You have attempted this quiz earlier but you can still see solutions"
-  //         );
-  //         setCan(false);
-  //       }
-  //     });
-  //   };
-  //   callfirst();
-  // }, []);
-
   const removeselection = () => {
-    setAnswers({ ...answers, [currentQuestion]: "" });
+    const updated = [...answers];
+    updated[currentQuestion] = "";
+    setAnswers(updated);
   };
 
   const seeSol = () => {
     setShowcurr(currentQuestion);
-    setViewedSolutions({ ...viewedSolutions, [currentQuestion]: true });
+    const updated = [...viewedSolutions];
+    updated[currentQuestion] = true;
+    setViewedSolutions(updated);
   };
 
-  // const handleAnswerChange = (event) => {
-  //   setAnswers({ ...answers, [currentQuestion]: event.target.value });
-  // };
   const handleAnswerChange = (event) => {
-    const updatedAnswers = [...answers]; // Create a copy of answers array
-    updatedAnswers[currentQuestion] = event.target.value; // Update the current question's answer
-    setAnswers(updatedAnswers); // Update state
+    const updatedAnswers = [...answers];
+    updatedAnswers[currentQuestion] = event.target.value;
+    setAnswers(updatedAnswers);
   };
 
   const handleSubmit = async () => {
@@ -95,217 +77,214 @@ const QuestionsForm2 = () => {
     answers.forEach((answer, index) => {
       if (answer === correctChoices[index]) {
         correctAnswers += 4;
-      } else if (answer != "") {
+      } else if (answer !== "") {
         correctAnswers--;
       }
     });
-    let fscore;
-    if (correctAnswers > 0) fscore = correctAnswers;
-    else fscore = 0;
-    console.log(score);
+    const fscore = correctAnswers > 0 ? correctAnswers : 0;
+
     const quizSubmissionData = {
       score: fscore,
       questions: answers.map((answer, index) => ({
-        index: index,
-        answer: answer,
+        index,
+        answer,
       })),
     };
     toast.success("sending");
-    console.log("sending request");
     await Api.quizSubmission({
       email: userInfo.email,
-      lessonType: "business",
-      quizSubmissionData: quizSubmissionData,
+      lessonType: "emotions", // changed from "business"
+      quizSubmissionData,
     })
-      .then((res) =>
+      .then(() =>
         toast.success("Successfully submitted Quiz, keep on going ✨✨")
       )
       .catch((err) =>
-        toast.error(
-          `Failed to submit quiz. Please try again later, err: ${err}`
-        )
+        toast.error(`Failed to submit quiz. Please try again later, err: ${err}`)
       );
     setShowAnswers(true);
+    setScore(fscore);
   };
 
   const calculateScore = () => {
     let correctAnswers = 0;
     answers.forEach((answer, index) => {
-      if (answer === correctChoices[index]) {
-        correctAnswers += 4;
-      } else if (answer != "") {
-        correctAnswers--;
-      }
+      if (answer === correctChoices[index]) correctAnswers += 4;
+      else if (answer !== "") correctAnswers--;
     });
-    if (correctAnswers > 0) setScore(correctAnswers);
-    else setScore(0);
+    setScore(correctAnswers > 0 ? correctAnswers : 0);
   };
 
   const handleNextQuestion = () => {
     setShowAnswers(false);
     setShowcurr(false);
-    setCurrentQuestion((prevQuestion) => prevQuestion + 1);
+    setCurrentQuestion((prev) => prev + 1);
   };
 
   const handlesubmitwithNext = () => {
-    if (!can) {
-      return;
-    }
-    if (answers[currentQuestion] == "") {
+    if (!can) return;
+
+    if (answers[currentQuestion] === "") {
       toast.error("Please select an option to submit");
       return;
     }
     if (
-      answers[currentQuestion] == correctChoices[currentQuestion] &&
+      answers[currentQuestion] === correctChoices[currentQuestion] &&
       !cursubmitted[currentQuestion]
     ) {
       total += 4;
       toast.success("Correct answer +4 coins");
     } else {
       total -= 1;
-      toast.error("Nice try but have to bear penatly of -1 coin");
+      toast.error("Nice try but have to bear penalty of -1 coin");
     }
-    setCurrSubmitted({ ...cursubmitted, [currentQuestion]: true });
+    const updated = [...cursubmitted];
+    updated[currentQuestion] = true;
+    setCurrSubmitted(updated);
+
     setShowAnswers(false);
     setShowcurr(false);
-    setCurrentQuestion((prevQuestion) => prevQuestion + 1);
+    setCurrentQuestion((prev) => prev + 1);
   };
 
   const handlePreviousQuestion = () => {
     setShowAnswers(false);
-    setCurrentQuestion((prevQuestion) => prevQuestion - 1);
+    setCurrentQuestion((prev) => prev - 1);
   };
 
   const handleViewSolution = () => {
     setShowAnswers(true);
   };
+
+  // ----------------- EMOTIONAL LITERACY QUIZ -----------------
+
   const questions = [
-    "What is the purpose of creating a budget?",
-    "Define 'fixed expenses' and provide an example.",
-    "What are 'variable expenses' and give an example.",
-    "Explain the difference between needs and wants in budgeting.",
-    "What is an emergency fund, and why is it important in budgeting?",
-    "What is the 'zero-based budgeting' method?",
-    "Define the term 'budget variance' in budgeting.",
-    "What is the 'envelope system' of budgeting?",
-    "What is the 50/30/20 rule in budgeting?",
-    "Explain the concept of 'sinking funds' in budgeting.",
-    "What is 'tracking expenses', and why is it essential in budgeting?",
-    "Define the term 'financial goal' in budgeting.",
-    "What are the benefits of budgeting?",
-    "Explain the concept of 'rolling budget' in budgeting.",
-    "How can budgeting help in reducing debt?",
+    "What does the term 'affect labeling' mean?",
+    "What is a primary benefit of naming your emotions?",
+    "Which statement best distinguishes emotions from moods?",
+    "Which option is the most emotionally granular label?",
+    "In the RAIN mindfulness technique, what does the 'R' stand for?",
+    "Which body cue commonly signals anxiety?",
+    "Which question best supports accurate emotion labeling?",
+    "Which statement about guilt and shame is accurate?",
+    "How do you typically use an Emotion Wheel effectively?",
+    "Which of the following is most likely an emotional trigger?",
+    "After labeling an emotion, which regulation strategy is most helpful?",
+    "When journaling for 5 minutes to track mood, what should you record?",
+    "What is cognitive reappraisal?",
+    "What does 'window of tolerance' refer to?",
+    "If you’re unsure which emotion you’re feeling, what’s the best next step?",
   ];
 
   const choices = [
     [
-      "a) To limit spending",
-      "b) To track income and expenses",
-      "c) To achieve financial goals",
-      "d) All of the above",
+      "a) Suppressing feelings so they go away",
+      "b) Putting feelings into words",
+      "c) Acting out emotions to release them",
+      "d) Ignoring feelings until they pass",
     ],
     [
-      "a) Expenses that change from month to month",
-      "b) Expenses that remain constant each month",
-      "c) Expenses incurred only on weekends",
-      "d) Expenses related to entertainment",
+      "a) It makes emotions last longer",
+      "b) It increases heart rate",
+      "c) It gives you a sense of control and can reduce intensity",
+      "d) It makes other people fix your feelings",
     ],
     [
-      "a) Expenses that remain constant each month",
-      "b) Expenses that change from month to month",
-      "c) Expenses incurred only on weekends",
-      "d) Expenses related to entertainment",
+      "a) Emotions are longer and vaguer; moods are brief and specific",
+      "b) Emotions are brief and tied to a specific trigger; moods are longer and more diffuse",
+      "c) Emotions and moods are the same thing",
+      "d) Moods are always positive; emotions are negative",
     ],
     [
-      "a) Needs are essential for survival, while wants are desires.",
-      "b) Needs are desires, while wants are essential for survival.",
-      "c) Needs are luxurious, while wants are basic necessities.",
-      "d) Needs and wants are the same in budgeting.",
+      "a) “Bad”",
+      "b) “Upset”",
+      "c) “Irritated”",
+      "d) “Not good”",
     ],
     [
-      "a) A fund set aside for unexpected expenses or emergencies",
-      "b) A fund used for vacation expenses",
-      "c) A fund invested in the stock market",
-      "d) A fund for buying luxury items",
+      "a) React",
+      "b) Recognize",
+      "c) Redefine",
+      "d) Resist",
     ],
     [
-      "a) A budgeting method where every dollar of income is allocated to expenses or savings",
-      "b) A budgeting method that focuses only on spending",
-      "c) A budgeting method that involves borrowing money to cover expenses",
-      "d) A budgeting method that does not involve tracking expenses",
+      "a) Relaxed muscles and steady breath",
+      "b) Tight chest and fast breathing",
+      "c) Yawning after a big meal",
+      "d) Stable heartbeat and warmth",
     ],
     [
-      "a) The difference between budgeted and actual expenses",
-      "b) The total amount of expenses",
-      "c) The amount of money allocated for savings",
-      "d) The total income earned",
+      "a) Why am I like this?",
+      "b) What am I feeling right now and where do I sense it in my body?",
+      "c) Who caused this feeling?",
+      "d) How can I hide this quickly?",
     ],
     [
-      "a) A method of tracking expenses using physical envelopes",
-      "b) A method of budgeting that involves only using cash for purchases",
-      "c) A method of budgeting that involves setting aside money for different spending categories",
-      "d) A method of budgeting that focuses on investing in envelopes",
+      "a) They are identical concepts",
+      "b) Guilt = I am bad; Shame = I did something bad",
+      "c) Guilt = I did something bad; Shame = I am bad",
+      "d) Shame only happens with positive emotions",
     ],
     [
-      "a) Allocating 50% of income for needs, 30% for wants, and 20% for savings",
-      "b) Allocating 50% of income for savings, 30% for needs, and 20% for wants",
-      "c) Allocating 50% of income for wants, 30% for savings, and 20% for needs",
-      "d) Allocating 50% of income for needs, 20% for wants, and 30% for savings",
+      "a) Avoid choosing any words so you don’t overthink",
+      "b) Start with a core emotion in the center and move outward to find a more precise word",
+      "c) Pick a random word from the outer ring",
+      "d) Only use words connected to anger",
     ],
     [
-      "a) Funds set aside for specific future expenses",
-      "b) Funds used for daily expenses",
-      "c) Funds invested in the stock market",
-      "d) Funds used for paying off debt",
+      "a) Sunlight at noon",
+      "b) Your favorite coffee mug",
+      "c) A critical email from your boss",
+      "d) Tying your shoes",
     ],
     [
-      "a) Tracking income only",
-      "b) Tracking expenses and income",
-      "c) Tracking expenses only",
-      "d) Tracking budgeted expenses only",
+      "a) Catastrophizing about worst-case scenarios",
+      "b) Slow diaphragmatic breathing and reframing the situation",
+      "c) Doomscrolling to distract yourself",
+      "d) Forcing yourself to feel nothing",
     ],
     [
-      "a) A specific amount of money set aside for future expenses",
-      "b) A long-term financial aspiration",
-      "c) A financial plan for the next year",
-      "d) A method of tracking expenses",
+      "a) Exact stock prices and weather",
+      "b) The emotion label, intensity (0–10), trigger, and body sensations",
+      "c) Your horoscope of the day",
+      "d) Anything except feelings",
     ],
     [
-      "a) Better control over finances",
-      "b) Ability to achieve financial goals",
-      "c) Reduction of financial stress",
-      "d) All of the above",
+      "a) Ignoring facts to feel better",
+      "b) Choosing a different, reasonable interpretation to shift how you feel",
+      "c) Venting loudly to friends",
+      "d) Exercising without reflection",
     ],
     [
-      "a) A budget that is prepared and reviewed regularly, with new projections replacing outdated ones",
-      "b) A budget that remains constant throughout the year",
-      "c) A budget that is prepared only once and not reviewed",
-      "d) A budget that focuses only on expenses",
+      "a) The perfect mood we should always be in",
+      "b) The range where we can think and feel without being overwhelmed",
+      "c) A state that eliminates all negative emotions",
+      "d) Something that applies only to children",
     ],
     [
-      "a) By allocating more money for debt repayment",
-      "b) By reducing unnecessary expenses",
-      "c) By increasing income",
-      "d) All of the above",
+      "a) Pick any label and move on quickly",
+      "b) Use a tentative label and stay curious (e.g., “Noticing tightness and worry—maybe anxiety”)",
+      "c) Ask someone else to decide your feeling",
+      "d) Scroll social media for ideas",
     ],
   ];
 
   const correctChoices = [
-    "d) All of the above",
-    "b) Expenses that remain constant each month",
-    "b) Expenses that change from month to month",
-    "a) Needs are essential for survival, while wants are desires.",
-    "a) A fund set aside for unexpected expenses or emergencies",
-    "a) A budgeting method where every dollar of income is allocated to expenses or savings",
-    "a) The difference between budgeted and actual expenses",
-    "c) A method of budgeting that involves setting aside money for different spending categories",
-    "a) Allocating 50% of income for needs, 30% for wants, and 20% for savings",
-    "a) Funds set aside for specific future expenses",
-    "b) Tracking expenses and income",
-    "b) A long-term financial aspiration",
-    "d) All of the above",
-    "a) A budget that is prepared and reviewed regularly, with new projections replacing outdated ones",
-    "d) All of the above",
+    "b) Putting feelings into words",
+    "c) It gives you a sense of control and can reduce intensity",
+    "b) Emotions are brief and tied to a specific trigger; moods are longer and more diffuse",
+    "c) “Irritated”",
+    "b) Recognize",
+    "b) Tight chest and fast breathing",
+    "b) What am I feeling right now and where do I sense it in my body?",
+    "c) Guilt = I did something bad; Shame = I am bad",
+    "b) Start with a core emotion in the center and move outward to find a more precise word",
+    "c) A critical email from your boss",
+    "b) Slow diaphragmatic breathing and reframing the situation",
+    "b) The emotion label, intensity (0–10), trigger, and body sensations",
+    "b) Choosing a different, reasonable interpretation to shift how you feel",
+    "b) The range where we can think and feel without being overwhelmed",
+    "b) Use a tentative label and stay curious (e.g., “Noticing tightness and worry—maybe anxiety”)",
   ];
 
   return (
@@ -351,6 +330,7 @@ const QuestionsForm2 = () => {
           >
             Previous
           </Button>
+
           {currentQuestion < questions.length - 1 && (
             <Button
               onClick={
@@ -370,6 +350,7 @@ const QuestionsForm2 = () => {
                 : "Submit and Next"}
             </Button>
           )}
+
           <Button
             onClick={removeselection}
             variant="outlined"
@@ -378,19 +359,21 @@ const QuestionsForm2 = () => {
           >
             Clear
           </Button>
+
           {!cursubmitted[currentQuestion] && (
             <Button
               onClick={handleNextQuestion}
               size="small"
-              varient="outlined"
+              variant="outlined"
               color="primary"
             >
-              skip
+              Skip
             </Button>
           )}
+
           {showcurr ? null : (
             <Button
-              variant="outline"
+              variant="outlined"
               color="secondary"
               size="small"
               onClick={seeSol}
@@ -398,10 +381,11 @@ const QuestionsForm2 = () => {
               View solution
             </Button>
           )}
+
           {currentQuestion === questions.length - 1 && (
             <Button
               type="submit"
-              variant="outline"
+              variant="outlined"
               size="small"
               color="primary"
               onClick={handleSubmit}
@@ -409,11 +393,12 @@ const QuestionsForm2 = () => {
               Submit
             </Button>
           )}
-          {showAnswers && <p className="mt-4">Your score: {score}%</p>}
+
+          {showAnswers && <p className="mt-4">Your score: {score}</p>}
           {showAnswers && (
             <Button
               onClick={handleViewSolution}
-              variant="outline"
+              variant="outlined"
               color="primary"
               className="mt-4"
               size="small"
@@ -423,24 +408,24 @@ const QuestionsForm2 = () => {
           )}
         </div>
       </FormControl>
+
       {showcurr ? (
         <motion.div className="flex flex-col justify-evenly items-center w-100 min-h-[200px]">
           <motion.h3>
             Correct option is: {correctChoices[currentQuestion]}
           </motion.h3>
+
           {!isBotOpen ? (
             <motion.button
               onClick={() => {
                 setOpen();
                 sendMessage(
-                  `I need help with Budgeting, I want to know the correct answer for question: ${
+                  `I need help with emotional literacy. Explain the correct answer for the question: ${
                     questions[currentQuestion]
-                  } and the explanation for the correct answer. from options: ${choices[
-                    currentQuestion
-                  ].toString()}`
+                  } from options: ${choices[currentQuestion].toString()}`
                 );
               }}
-              className="bg-green-500 p-2 rounded-lg"
+              className="bg-green-500 p-2 rounded-lg text-white"
             >
               Ask for help
             </motion.button>
@@ -449,10 +434,10 @@ const QuestionsForm2 = () => {
               onClick={() => {
                 toggleBot();
               }}
-              className="bg-red-500 rounded-lg w-3/4 text-center font-bold shadow-lg m-4 p-4"
+              className="bg-red-500 rounded-lg w-3/4 text-center font-bold shadow-lg m-4 p-4 text-white"
             >
-              Window on right side will pop up, please wait to get the answer,
-              after that you can ask for help again in same window.
+              Window on right side will pop up. Please wait for the answer, then
+              you can ask for help again in the same window.
             </motion.button>
           )}
         </motion.div>
@@ -461,4 +446,4 @@ const QuestionsForm2 = () => {
   );
 };
 
-export default QuestionsForm2;
+export default QuestionsForm_Emotions;

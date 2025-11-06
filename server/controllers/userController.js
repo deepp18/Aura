@@ -28,28 +28,36 @@ class UserController {
   }
 
   // send email
- sendEmail = async (email) => {
-  try {
-    // TEMP: disable actual email sending (for local testing)
-    let otp = this.generateOTP();
+  sendEmail = async (email) => {
+    try {
+      let transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.MAIL,
+          pass: process.env.MAILPASS,
+        },
+      });
 
-    const user = await User.findOne({ email });
-    if (!user) return; // nothing to do
+      let otp = this.generateOTP();
 
-    // store OTP so verifyOtp will still work
-    user.otp = otp;
-    await user.save();
-
-    // Log OTP to server console for testing
-    console.log(`TEMP OTP for ${email}: ${otp}`);
-
-    // Optionally return the otp
-    return { message: 'OTP generated (not emailed)', otp };
-  } catch (error) {
-    console.log('sendEmail (temp disabled) error:', error);
-  }
-};
-
+      const user = await User.findOne({ email });
+      if (!user)
+        return res.status(404).json({ message: "User does not exist!" });
+      user.otp = otp;
+      await user.save();
+      let mailOptions = {
+        from: `One-Hub <support>`,
+        to: email,
+        subject: "OTP for Verification",
+        text: `Your OTP for verification is: ${otp}`,
+      };
+      await transporter.sendMail(mailOptions);
+      // res.status(200).json({ message: "success" });
+    } catch (error) {
+      console.log(error);
+      // res.status(500).json({ message: "Internal Server Error" });
+    }
+  };
   register = async (req, res) => {
     try {
       const { name, email, phone, pfp, password, bio } = req.body;
@@ -69,13 +77,13 @@ class UserController {
       };
       const tasks = [
         {
-          title: "Finance Articles Reading",
-          desc: "Read at least 2 Finance Related Articles",
+          title: "Psychological Blog Reading",
+          desc: "Read at least 2 Mental Health Related Articles",
           isAdminGenerated: true,
           date: new Date().setHours(0, 0, 0, 0),
         },
         {
-          title: "Finance Trivia Question",
+          title: "Mental Trivia Question",
           desc: "Answer the daily trivia question",
           isAdminGenerated: true,
           date: new Date().setHours(0, 0, 0, 0),
@@ -883,3 +891,6 @@ class UserController {
 }
 
 export default UserController;
+
+
+

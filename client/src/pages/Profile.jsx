@@ -148,11 +148,11 @@ function Profile() {
         <div className='w-full h-full flex flex-col gap-4'>
           <div className='w-full flex items-start gap-4'>
             <div className='w-1/2 flex flex-col items-start gap-4 p-4'>
-              <div className='text-3xl font-bold text-main-purp flex items-center'>
+              <div className='text-3xl font-bold text-white flex items-center'>
                 Your Profile
                 {!isEditMode ? (<span>
                   <IconButton onClick={handleEditClick}>
-                    <ModeEditIcon />
+                    <ModeEditIcon className="text-white" />
                   </IconButton>
                 </span>) :
                   (<div className='flex items-center gap-2 ml-8'>
@@ -186,8 +186,8 @@ function Profile() {
                       />
                     </div>
                     <div className='flex items-center gap-2'>
-                      {isEditMode && <span {...getRootProps()} className='text-blue text-xs text-center w-full dark:!text-pink cursor-pointer underline'>Change</span>}
-                      {isEditMode && <span onClick={handleRemovePfpClick} className='text-blue text-xs text-center w-full dark:!text-pink cursor-pointer underline'>Remove</span>}
+                      {isEditMode && <span {...getRootProps()} className='text-white text-xs text-center w-full cursor-pointer underline'>Change</span>}
+                      {isEditMode && <span onClick={handleRemovePfpClick} className='text-white text-xs text-center w-full cursor-pointer underline'>Remove</span>}
                     </div>
                   </div>)
                   : (
@@ -203,31 +203,33 @@ function Profile() {
                       }}
                     />
                   )}
-                <div className='w-[60%] text-white dark:!text-black flex flex-col items-start justify-start gap-2'>
+                <div className='w-[60%] text-white flex flex-col items-start justify-start gap-2'>
                   {!isEditMode ? (
                     <>
-                      <div className='text-3xl tracking-wide font-bold'>
+                      <div className='text-3xl tracking-wide font-bold text-white'>
                         {user.name}
                       </div>
-                      <div className='text-lg font-semibold tracking-wide'>
+                      <div className='text-lg font-semibold tracking-wide text-white'>
                         {user.title}
                       </div>
-                      <div className='w-full break-words text-base tracking-wide'>
+                      <div className='w-full break-words text-base tracking-wide text-white'>
                         {user.bio}
                       </div>
-                      <div className='w-full break-words text-base font-semibold text-black text-opacity-50 tracking-wide'>
-                        Monthly Income: {user.monthlyIncome}
+                      <div className='w-full break-words text-base font-semibold text-white tracking-wide'>
+                      
                       </div>
                     </>
                   ) : (
                     <>
-                      <div className={`w-full flex flex-col items-center justify-start gap-8`}>
+                      <div className={`w-full flex flex-col items-center justify-start gap-8 text-white`}>
                         <TextField
                           label='Name'
                           variant='outlined'
                           fullWidth
                           value={editedInfo.name}
                           onChange={(e) => setEditedInfo({ ...editedInfo, name: e.target.value })}
+                          InputLabelProps={{ style: { color: 'white' } }}
+                          InputProps={{ style: { color: 'white' } }}
                         />
                         <TextField
                           label='Bio'
@@ -237,6 +239,8 @@ function Profile() {
                           fullWidth
                           value={editedInfo.bio}
                           onChange={(e) => setEditedInfo({ ...editedInfo, bio: e.target.value })}
+                          InputLabelProps={{ style: { color: 'white' } }}
+                          InputProps={{ style: { color: 'white' } }}
                         />
                         <TextField
                           label='Monthly Income'
@@ -245,6 +249,8 @@ function Profile() {
                           fullWidth
                           value={editedInfo.monthlyIncome}
                           onChange={(e) => setEditedInfo({ ...editedInfo, monthlyIncome: e.target.value })}
+                          InputLabelProps={{ style: { color: 'white' } }}
+                          InputProps={{ style: { color: 'white' } }}
                         />
                       </div>
                     </>
@@ -252,11 +258,11 @@ function Profile() {
                 </div>
               </div>
             </div>
-            <div className='w-1/2 flex flex-col items-start gap-4 p-4'>
+            <div className='w-1/2 flex flex-col items-start gap-4 p-4 text-white'>
               <AvatarComp image={user.gaming.avatar?.image} user={user} />
             </div>
           </div>
-            <div>
+            <div className='text-black'>
               <Tabs user={user} />
             </div>
         </div>)}
@@ -265,3 +271,4 @@ function Profile() {
 }
 
 export default Profile;
+

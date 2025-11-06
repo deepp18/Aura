@@ -2,38 +2,334 @@
 @tailwind components;
 @tailwind utilities;
 
+/* === GLOBAL DARK GRADIENT BACKGROUND === */
+html,
 body {
-  font-family: 'Poppins', sans-serif;
-}
-
-.fight-bg {
-  background-image: url(/assets/ender_world.gif);
-  background-size: cover;
-  background-position: center;
+  font-family: "Poppins", sans-serif;
+  background: radial-gradient(
+      circle at top left,
+      rgba(45, 15, 80, 0.9),
+      rgba(10, 10, 25, 1)
+    ),
+    radial-gradient(circle at bottom right, rgba(10, 20, 40, 0.8), #060814);
+  color: #e5e5f7;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-attachment: fixed;
   background-repeat: no-repeat;
-  height: 100vh;
+  background-size: cover;
 }
 
-.loader,
-.loader:before,
-.loader:after {
-  width: 12px; /* update this to control the size */
-  aspect-ratio: .5;
-  display: grid;
-  background: radial-gradient(#000 68%,#0000 72%) center/100% 50% no-repeat;
-  animation: load 1.2s infinite linear calc(var(--_s,0)*.4s);
-  transform: translate(calc(var(--_s,0)*150%));
+/* Remove internal overlays that block the background */
+#root,
+.app-container {
+  background: transparent;
+  backdrop-filter: none;
 }
-.loader:before,
-.loader:after {
-  content: "";
-  grid-area: 1/1;
-}
-.loader:before {--_s: -1}
-.loader:after  {--_s:  1}
 
-@keyframes load {
-  20% {background-position: top   }
-  40% {background-position: bottom}
-  60% {background-position: center}
+/* Headings */
+h1,
+h2,
+h3,
+h4 {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Body text */
+p {
+  color: rgba(230, 230, 255, 0.85);
+}
+
+/* Buttons - glowing gradient look */
+button,
+.btn-primary {
+  background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 9999px;
+  transition: all 0.3s ease;
+}
+
+button:hover,
+.btn-primary:hover {
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.5),
+    0 0 40px rgba(59, 130, 246, 0.3);
+  transform: scale(1.03);
+}
+
+/* Cards & UI panels */
+.glass-card {
+  background: rgba(20, 20, 40, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* Footer gradient */
+footer {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.85);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+/* Cursor follower: fixed to viewport, doesn't block clicks, GPU-accelerated */
+.cursor-follower {
+  position: fixed;          /* tie to viewport */
+  left: 0;
+  top: 0;
+  pointer-events: none;     /* never block clicks */
+  will-change: transform, opacity;
+  z-index: 0;               /* behind main app UI */
+  transform: translate3d(0,0,0);
+}
+
+/* Make main app container appear above the follower */
+.app-container,
+.app-main {
+  position: relative; 
+  padding-top: 2rem;/* ensure stacking context for content */
+  z-index: 20;
+}
+
+/* Debug helper (temporary) */
+.cursor-follower.debug {
+  outline: 2px dashed rgba(255,255,255,0.12);
+  opacity: 0.85;
+}
+/* === FOOTER STYLING (Glassmorphic Gradient Theme) === */
+.footer-container {
+  width: 100%;
+  padding: 2rem 1.5rem;
+  background: rgba(20, 20, 40, 0.35);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 10;
+}
+
+.footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  color: rgba(240, 240, 255, 0.85);
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .footer-inner {
+    flex-direction: row;
+    text-align: left;
+  }
+}
+
+.footer-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+@media (min-width: 768px) {
+  .footer-left {
+    align-items: flex-start;
+  }
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.footer-link {
+  font-size: 0.875rem;
+  color: rgba(230, 230, 255, 0.8);
+  transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+  color: #ffffff;
+}
+
+.footer-social {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.footer-icon {
+  font-size: 1.25rem !important;
+  opacity: 0.8;
+  transition: all 0.25s ease;
+}
+
+.footer-icon:hover {
+  opacity: 1;
+  transform: scale(1.15);
+  color: #8b5cf6;
+}
+
+.text-gradient {
+  background: linear-gradient(90deg, #60a5fa 0%, #a78bfa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+/* ---------- Header / announcement strip ---------- */
+.top-announcement {
+  width: 100%;
+  background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  color: rgba(255,255,255,0.95);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.announce-inner {
+  display: flex;
+  align-items: center;
+  height: 36px;
+}
+.announce-text {
+  width: 100%;
+  text-align: center;
+  color: rgba(255,255,255,0.9);
+}
+
+/* ---------- Navbar container (glass, flat) ---------- */
+.header-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.navbar {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.navbar-inner {
+  background: linear-gradient(180deg, rgba(10,10,20,0.55), rgba(10,10,20,0.45));
+  border: 1px solid rgba(255,255,255,0.04);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 6px 20px rgba(2,4,12,0.5);
+  border-radius: 8px; /* subtle rounding (not pill) */
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 18px;
+  padding-right: 18px;
+}
+
+/* center link active underline */
+.active-underline {
+  display: block;
+  height: 3px;
+  width: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(90deg,#8b5cf6 0%, #06b6d4 100%);
+  margin-top: 6px;
+}
+
+/* CTA buttons */
+.cta-outline {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(0,0,0,0.25);
+  color: #fff;
+  font-weight: 700;
+  text-transform: none;
+  transition: all 0.18s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+}
+.cta-outline:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.45);
+}
+
+.cta-primary {
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  background: linear-gradient(90deg,#8b5cf6 0%, #6ee7b7 100%);
+  color: #0b1020;
+  border: none;
+  text-transform: none;
+  transition: transform .18s ease, box-shadow .18s ease;
+  box-shadow: 0 8px 28px rgba(139,92,246,0.12);
+}
+.cta-primary:hover {
+  transform: translateY(-1px);
+  filter: brightness(0.98);
+}
+
+/* dropdown menu backgrounds */
+.menu-bg {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.06);
+  backdrop-filter: blur(10px);
+}
+
+/* mobile menu background */
+.mobile-menu-bg {
+  background: linear-gradient(180deg, rgba(10,11,15,0.94), rgba(10,11,15,0.92));
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+/* ensure nav center doesn't overflow */
+.nav-center {
+  max-width: 720px;
+}
+
+/* small responsive tweaks */
+@media (max-width: 768px) {
+  .nav-center { display: none; }
+  .cta-group { display: none; }
+  .navbar-inner { padding-left: 12px; padding-right: 12px; }
+}
+.left-6.bottom-6.fixed,
+.right-1.bottom-6.fixed,
+.right-1.bottom-6.fixed > * {
+  z-index: 99990 !important;
+}
+
+/* Specifically target the floating toggle button and the panel (ul) */
+.left-6.bottom-6.fixed {           /* the floating toggle button */
+  z-index: 99995 !important;
+}
+
+/* the chat panel (right-bottom) - make sure it overlays everything */
+.right-1.bottom-6.fixed {
+  z-index: 100000 !important;
+}
+
+/* pointer-events: keep panel interactive but keep parent animation layers non-blocking */
+.pointer-events-auto.fixed {
+  pointer-events: auto !important;
+}
+
+/* Safety: lower the z-index of known animated background items if they used z-indexs <= 50 */
+.absolute.animate-pulse,
+.-top-24,
+.-bottom-24,
+.z-10 {
+  z-index: 10 !important;
+}
+
+/* Optional: create a named class fallback if you decide to tweak JSX later */
+.chatbot-highlayer {
+  position: fixed !important;
+  z-index: 100000 !important;
+  pointer-events: auto !important;
 }

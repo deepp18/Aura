@@ -229,8 +229,8 @@ const Tracker = () => {
           )}
           <div className="w-[21.5%] flex flex-col items-start gap-4">
             <div>
-              <h1 className="text-3xl font-bold">Expense Tracker</h1>
-              <p className="text-sm">Track your expenses</p>
+              <h1 className="text-3xl font-bold">Task Tracker</h1>
+              <p className="text-sm">Track your Tasks</p>
             </div>
             <Button
               variant="contained"
@@ -240,7 +240,7 @@ const Tracker = () => {
               onClick={handleClickOpen}
             >
               <AddCircleRoundedIcon />
-              Add Expense
+              Add Tasks
             </Button>
             <Button
               onClick={() => handleSuggestion()}
@@ -268,9 +268,9 @@ const Tracker = () => {
           <div className="w-full flex flex-col items-start justify-start gap-8 p-4 h-[80vh] overflow-y-scroll">
             <div className="w-full flex items-center justify-between">
               <p className="font-medium text-lg">
-                Total Expenses of the month {getSelectedMonth(selectedDate)} -{" "}
+                Total Tasks of the  {getSelectedMonth(selectedDate)} -{" "}
                 <span className="font-bold underline text-xl">
-                  ₹{expenses ? expenses.totalAmount : 0}
+                  {expenses ? expenses.totalAmount : 0}
                 </span>
               </p>
               {expenses && (

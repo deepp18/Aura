@@ -25,6 +25,7 @@ const NewParty = ({ usersList, user, change, setChange }) => {
         if (partyName === '') {
             toast.error('Please enter a party name');
             setBtnName('Create a Party');
+
             return;
         }
         if (selectedUsers.length === 0) {
@@ -66,6 +67,20 @@ const NewParty = ({ usersList, user, change, setChange }) => {
                     variant="outlined"
                     value={partyName}
                     onChange={(e) => setPartyName(e.target.value)}
+                    InputLabelProps={{
+                        style: { color: 'white' }, // <-- label color
+                    }}
+                    InputProps={{
+                        style: { color: 'white', borderColor: 'white' }, // <-- input text color
+                    }}
+                    sx={{
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': { borderColor: 'white' },
+                            '&:hover fieldset': { borderColor: '#a3bffa' },
+                            '&.Mui-focused fieldset': { borderColor: '#64b5f6' },
+                        },
+                    }}
+                   
                 />
                 <Autocomplete
                     multiple
@@ -80,6 +95,7 @@ const NewParty = ({ usersList, user, change, setChange }) => {
                             {...params}
                             label="Select Party Members"
                             placeholder="Party Members"
+                            
                         />
                     )}
                 />

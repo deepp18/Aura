@@ -160,11 +160,11 @@ function NavBar() {
                           <ul className="py-1 text-gray-700">
                             <li className="px-4 py-2 text-sm hover:bg-gray-200 cursor-pointer">
                               <a href="/investment-portfolio">
-                                Investment Portfolio Suggestions
+                                Mental Health Activity Suggestions
                               </a>
                             </li>
                             <li className="px-4 py-2 text-sm hover:bg-gray-200 cursor-pointer">
-                              <a href="/expense-tracker">Expense Tracker</a>
+                              <a href="/expense-tracker">Task Tracker</a>
                             </li>
                           </ul>
                         </div>

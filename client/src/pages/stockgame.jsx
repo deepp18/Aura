@@ -150,7 +150,7 @@ function StockGame() {
         />
       </Modal>
 
-      <h1 className="text-2xl font-bold mb-8">Stock Market Prediction Game</h1>
+      <h1 className="text-2xl font-bold mb-8"></h1>
       <div className="mb-4 h-10">
         <Menu as="div" className="relative ml-3 h-full">
           <div>
@@ -160,7 +160,7 @@ function StockGame() {
                 className="shadow-md hover:shadow-2xl font-bold text-lg"
                 variant="outlined"
               >
-                Click to choose stock
+         
               </Button>
             </Menu.Button>
           </div>
@@ -234,7 +234,7 @@ function StockGame() {
       {symbol && loading ? (
         <p className="text-xl font-bold mb-4 animate-bounce">Loading...</p>
       ) : loading && !symbol ? (
-        <p className="text-xl font-bold mb-4">Please select a stock</p>
+        <p className="text-xl font-bold mb-4"></p>
       ) : (
         <p className="text-xl font-bold mb-4">Selected stock: {symbol}</p>
       )}
