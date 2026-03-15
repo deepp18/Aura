@@ -68,7 +68,7 @@ TEMPLATES = {
     "remorse": "I hear you. A careful repair step you can take:",
     "sadness": "I'm sorry you're sad. A comforting small step:",
     "surprise": "Oh — that surprised you. A quick note and decision:",
-    "neutral": "Feeling neutral is fine. Try a tiny mood boost:"
+    "neutral": "IT is is fine. Try a tiny mood boost:"
 }
 
 # Helper
