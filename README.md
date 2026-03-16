@@ -63,3 +63,26 @@ Together, these features make **emotional awareness fun, personalized, and susta
 Below is the overall flow of the AURA system:
 
 ![AURA Flowchart](/image.png.jpg)
+## Home Page
+![Home Page](Screenshot%2026-03-16%185547.png)
+
+## Pending Well-being Tasks
+![Pending Tasks](Screenshot 2026-03-16 185557.png)
+
+## Create or Join Party
+![Create Party](Screenshot 2026-03-16 185636.png)
+
+## Party Lobby
+![Party Lobby](Screenshot 2026-03-16 185648.png)
+
+## Battle System
+![Battle System](Screenshot 2026-03-16 185835.png)
+
+## User Profile & Inventory
+![Profile](Screenshot 2026-03-16 185907.png)
+
+## Task Tracker
+![Task Tracker](Screenshot 2026-03-16 185919.png)
+
+## Productivity Analytics Dashboard
+![Analytics](Screenshot 2026-03-16 185933.png)
