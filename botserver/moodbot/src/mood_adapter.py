@@ -1,13 +1,59 @@
-
-from flask import Flask, request, jsonify, make_response
+from flask import Flask, request, jsonify
 from flask_cors import CORS
-import evaluate as eval_mod   # assumes evaluate.py is in same folder or PYTHONPATH
+import evaluate as eval_mod
+from datetime import datetime
+from pymongo import MongoClient
 
-# Flask app setup
 app = Flask(__name__)
 CORS(app)
 
-# --- LABEL_MAP (unchanged) ---
+# -------------------------
+# MongoDB Connection
+# -------------------------
+
+client = MongoClient("mongodb://localhost:27017/")
+db = client["aura"]
+mood_collection = db["moods"]
+
+# -------------------------
+# Mood Map (Emotion → Score)
+# -------------------------
+
+MOOD_MAP ={
+  "admiration": 5,
+  "amusement": 5,
+  "anger": 1,
+  "annoyance": 1,
+  "approval": 5,
+  "caring": 4,
+  "confusion": 3,
+  "curiosity": 4,
+  "desire": 4,
+  "disappointment": 1,
+  "disapproval": 1,
+  "disgust": 1,
+  "embarrassment": 2,
+  "excitement": 5,
+  "fear": 2,
+  "gratitude": 5,
+  "grief": 2,
+  "joy": 5,
+  "love": 5,
+  "nervousness": 2,
+  "optimism": 5,
+  "pride": 5,
+  "realization": 3,
+  "relief": 5,
+  "remorse": 2,
+  "sadness": 2,
+  "surprise": 3,
+  "neutral": 3
+}
+
+# -------------------------
+# LABEL MAP
+# -------------------------
+
 LABEL_MAP = {
   "LABEL_0": {"emotion": "admiration", "tasks": [{"task": "Write one thing or person you admire and why.", "points": 5}, {"task": "Send a quick compliment or appreciation message.", "points": 4}]},
   "LABEL_1": {"emotion": "amusement", "tasks": [{"task": "Watch a short funny clip or meme.", "points": 3}, {"task": "Share a light-hearted joke with a friend.", "points": 2}]},
@@ -39,106 +85,96 @@ LABEL_MAP = {
   "LABEL_27": {"emotion": "neutral", "tasks": [{"task": "Pick one simple activity you enjoy and do it for 10 minutes.", "points": 4}, {"task": "Write one line about how you’d like to feel today.", "points": 3}]}
 }
 
-# --- TEMPLATES (unchanged) ---
+# -------------------------
+# Templates
+# -------------------------
+
 TEMPLATES = {
-    "admiration": "That's lovely — sounds inspiring. Here's something small you can try:",
-    "amusement": "Haha — nice! Keep that lightness going with:",
-    "anger": "I'm sorry you're feeling angry. Here's something small you can try right now:",
-    "annoyance": "That sounds annoying. Try one of these small fixes:",
-    "approval": "Nice — you approve. To reinforce that, you could:",
-    "caring": "That's kind — a small caring action you can do now:",
-    "confusion": "I get that — confusion is frustrating. These might help:",
-    "curiosity": "Great — curious minds are powerful. Try this:",
-    "desire": "That's a clear want — here are two small steps you can take:",
-    "disappointment": "Sorry that happened. A small comfort or reflection you can try:",
-    "disapproval": "I hear you. If you want to respond calmly, try:",
-    "disgust": "That sounds unpleasant. A short reset you could do:",
-    "embarrassment": "Awkward moments happen. These tiny moves help:",
-    "excitement": "Love the energy — use it with a quick step:",
-    "fear": "I'm sorry you feel afraid. A short grounding step:",
-    "gratitude": "That's wonderful. You could strengthen it by:",
-    "grief": "I'm really sorry — gentle care might help right now:",
-    "joy": "That's wonderful — enjoy it and maybe try:",
-    "love": "That's warm. A small gesture you could make:",
-    "nervousness": "Nervousness is normal. Try this quick prep or grounding:",
-    "optimism": "Great to feel hopeful. One small planning step:",
-    "pride": "Well done — celebrate this with:",
-    "realization": "Nice insight. A small action to lock it in:",
-    "relief": "I'm glad that's eased. Something small to consolidate it:",
-    "remorse": "I hear you. A careful repair step you can take:",
-    "sadness": "I'm sorry you're sad. A comforting small step:",
-    "surprise": "Oh — that surprised you. A quick note and decision:",
-    "neutral": "IT is is fine. Try a tiny mood boost:"
+    "joy":"That's wonderful — enjoy it and maybe try:",
+    "sadness":"I'm sorry you're sad. A comforting small step:",
+    "anger":"I'm sorry you're feeling angry. Here's something small you can try:",
+    "neutral":"That's okay. Try a tiny mood boost:"
 }
 
+# -------------------------
 # Helper
+# -------------------------
+
 def _get_label_entry(raw_label):
-    if isinstance(raw_label, str) and raw_label.startswith("LABEL_") and raw_label in LABEL_MAP:
+
+    if raw_label in LABEL_MAP:
         return raw_label, LABEL_MAP[raw_label]
-    if isinstance(raw_label, str):
-        lower = raw_label.lower()
-        for code, entry in LABEL_MAP.items():
-            if entry.get("emotion") == lower:
-                return code, entry
-    return None, None
+
+    lower = raw_label.lower()
+
+    for code, entry in LABEL_MAP.items():
+        if entry["emotion"] == lower:
+            return code, entry
+
+    return "LABEL_27", LABEL_MAP["LABEL_27"]
+
+# -------------------------
+# Health Check
+# -------------------------
 
 @app.route("/api/predict", methods=["GET"])
 def health():
-    # keep JSON for the health check
-    return jsonify({"status": "ok", "backend": "evaluate.predict"})
+    return jsonify({"status":"ok"})
+
+# -------------------------
+# Chatbot Endpoint
+# -------------------------
 
 @app.route("/api/predict", methods=["POST"])
 def predict():
-    # ALWAYS return plain text (chat-friendly)
+
     data = request.get_json(force=True) or {}
-    text = data.get("text") or data.get("message") or ""
+    text = data.get("text") or ""
 
     if not text:
-        return ("Please tell me how you feel.", 200, {"Content-Type": "text/plain; charset=utf-8"})
+        return ("Please tell me how you feel.",200,
+        {"Content-Type":"text/plain; charset=utf-8"})
 
-    try:
-        raw_output = eval_mod.predict(text)
+    raw_output = eval_mod.predict(text)
 
-        # Normalize to a list of labels/strings
-        if isinstance(raw_output, list):
-            labels = [(it["label"] if isinstance(it, dict) and "label" in it else str(it)) for it in raw_output]
-        elif isinstance(raw_output, dict) and "label" in raw_output:
-            labels = [raw_output["label"]]
-        else:
-            labels = [str(raw_output)]
+    labels = [str(x) for x in raw_output]
 
-        # Find first matching entry
-        primary_code, primary_entry = None, None
-        for lbl in labels:
-            primary_code, primary_entry = _get_label_entry(lbl)
-            if primary_entry: break
-        if not primary_entry:
-            for lbl in labels:
-                primary_code, primary_entry = _get_label_entry(lbl.lower())
-                if primary_entry: break
-        if not primary_entry:
-            primary_code, primary_entry = "LABEL_27", LABEL_MAP["LABEL_27"]
+    code, entry = _get_label_entry(labels[0])
 
-        emotion = primary_entry.get("emotion", "neutral")
-        reply = TEMPLATES.get(emotion, "I hear you. Here are a couple of small things you can try:")
-        tasks = primary_entry.get("tasks", [])[:2]
+    emotion = entry["emotion"]
 
-        # Compose plain, human-friendly text
-                # Compose plain, human-friendly text with real newlines
-        lines = [reply]
-        for t in tasks:
-            lines.append(f"• {t['task']}")
+    mood_score = MOOD_MAP.get(emotion,3)
 
-        # Join lines using real newline characters, but user asked to avoid \n output;
-        # we will join with a single space so text appears as one line in frontends that render literally.
-        body = " ".join(lines)
+    # Save mood to MongoDB
+    mood_collection.insert_one({
+        "date": datetime.now().strftime("%Y-%m-%d"),
+        "emotion": emotion,
+        "mood": mood_score
+    })
 
-        # Ensure Flask sends plain text without JSON escaping
-        return (body, 200, {"Content-Type": "text/plain; charset=utf-8"})
+    reply = TEMPLATES.get(emotion,"I hear you. Try this:")
 
+    tasks = entry["tasks"][:2]
 
-    except Exception as e:
-        return (f"Sorry, something went wrong: {e}", 500, {"Content-Type": "text/plain; charset=utf-8"})
+    lines = [reply]
+
+    for t in tasks:
+        lines.append(f"• {t['task']}")
+
+    body = " ".join(lines)
+
+    return (body,200,{"Content-Type":"text/plain; charset=utf-8"})
+
+# -------------------------
+# Mood API for Dashboard
+# -------------------------
+
+@app.route("/api/mood", methods=["GET"])
+def get_mood():
+
+    moods = list(mood_collection.find({}, {"_id":0}))
+
+    return jsonify(moods)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000)
+    app.run(host="0.0.0.0",port=8000)

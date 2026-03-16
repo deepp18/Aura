@@ -7,7 +7,7 @@ import { Bars3Icon } from "@heroicons/react/24/outline";
 import WhatshotOutlinedIcon from "@mui/icons-material/WhatshotOutlined";
 import { IconButton, Button } from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";
-import { Leaderboard, Logout, Person, Stream } from "@mui/icons-material";
+import {  Leaderboard, Logout, Person, Stream } from "@mui/icons-material";
 import { FiChevronDown } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
@@ -38,7 +38,7 @@ import Savings from "./pages/Savings";
 import Learning from "./pages/Learning";
 import LeaderBoard from "./pages/FriendsPage";
 import Tracker from "./pages/helpers/Tracker";
-import InvestPortfolio from "./pages/helpers/InvestPortfolio";
+import Analytic from "./pages/helpers/Analytic";
 
 /* Local assets & small components used by NavBar */
 import logo from "./assets/logo-hck.svg";
@@ -209,7 +209,7 @@ function NavBarInline() {
                       backdropFilter: "blur(10px)",
                     }}
                   >
-                    <a href="/investment-portfolio" className="block px-4 py-3 text-sm text-white/80 hover:bg-white/5">IMental Health Enhancer Suggestions</a>
+                    <a href="/Analytic" className="block px-4 py-3 text-sm text-white/80 hover:bg-white/5">Productivity Analytics</a>
                     <a href="/expense-tracker" className="block px-4 py-3 text-sm text-white/80 hover:bg-white/5">Tasks Tracker</a>
                   </motion.div>
                 )}
@@ -393,7 +393,7 @@ function App() {
         { path: "/financing", element: <Financing /> },
         { path: "/financing/qanda", element: <FinancingQAndA /> },
         { path: "/expense-tracker", element: <Tracker /> },
-        { path: "/investment-portfolio", element: <InvestPortfolio /> },
+        { path: "/Analytic", element: <Analytic /> },
       ],
     },
   ]);

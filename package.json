@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "date-fns": "^4.1.0",
+    "pymongo": "^0.0.1-security",
+    "react-calendar-heatmap": "^1.10.0",
+    "recharts": "^3.8.0"
+  }
+}

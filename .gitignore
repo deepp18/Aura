@@ -9,3 +9,4 @@ botserver/venv/
 server/.env/
 
 
+node_modules
