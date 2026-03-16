@@ -1,4 +1,4 @@
-# 🌈 AURA: An Intelligent, Gamified System for Mood Tracking and Dream-Based Emotional Analysis
+# 🌈 AURA: An Intelligent, Gamified System for Mood Tracking 
 
 > “Mental wellness begins with understanding one’s own emotions.”
 
@@ -11,7 +11,7 @@ While existing wellness platforms and apps help track moods or offer therapy, th
 
 There is a need for an **AI-powered, gamified wellness platform** that helps users:
 - Track their moods,
-- Analyze dreams, and
+- Provide User Analytics,
 - Receive personalized emotional insights  
 
 — all while staying emotionally engaged through play and reflection.
@@ -24,16 +24,12 @@ There is a need for an **AI-powered, gamified wellness platform** that helps use
 
 **AURA** is an **AI-powered, gamified mental wellness platform** that helps users understand and regulate their emotions through:
 - **Mood Tracking**
-- **Dream Journaling**
+- **Minecraft Task based Game**
 - **AI Emotional Analysis**
 - **Symbolic, Interactive Visualization**
 
-The platform features a **Minecraft-style MoodWorld**, where the environment dynamically evolves based on the user’s emotional state — for example:
-- Calm → serene environments 🌊  
-- Anxiety → foggy skies 🌫️  
-- Joy → blooming forests 🌸  
 
-Users can log daily moods, record dreams, and receive emotional insights from a **custom-trained AI model** based on the **GoEmotions dataset (28 moods)**.
+Users can log daily moods,  and receive emotional insights from a **custom-trained AI model** based on the **GoEmotions dataset (28 moods)**.
 
 Unlike traditional mental health tools, AURA transforms emotional reflection into a **playful experience**.  
 Users earn **MoodBlocks** and **LucidPoints** for consistent journaling, complete daily tasks, and can form **2-player mood parties** to face symbolic monsters (like *Anxietron* or *Procrastinodon*) in cooperative gameplay that represents overcoming internal struggles.
@@ -58,7 +54,7 @@ Together, these features make **emotional awareness fun, personalized, and susta
 | **Database** | MongoDB Atlas |
 | **Realtime Systems** | Socket.io |
 | **Authentication** | Firebase Auth |
-| **NLP Models** | RAG for Dream Analysis |
+| **Face Recognition Model** | Custom CNN model |
 
 ---
 
