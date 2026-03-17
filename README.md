@@ -67,7 +67,7 @@ Below is the overall flow of the AURA system:
 ![Home Page](Screenshot%202026-03-16%20185547.png)
 
 ## Pending Well-being Tasks
-![Pending Tasks](Screenshot%202026-03-16%20185557.png)
+![Pending Tasks](Snapshots/Screenshot%202026-03-16%20185557.png)
 
 ## Create or Join Party
 ![Create Party](Screenshot%202026-03-16%20185636.png)
