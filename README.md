@@ -64,25 +64,25 @@ Below is the overall flow of the AURA system:
 
 ![AURA Flowchart](/image.png.jpg)
 ## Home Page
-![Home Page](Screenshot%202026-03-16%20185547.png)
+![Home Page](Snapshots/Screenshot%202026-03-16%20185547.png)
 
 ## Pending Well-being Tasks
 ![Pending Tasks](Snapshots/Screenshot%202026-03-16%20185557.png)
 
 ## Create or Join Party
-![Create Party](Screenshot%202026-03-16%20185636.png)
+![Create Party](Snapshots/Screenshot%202026-03-16%20185636.png)
 
 ## Party Lobby
-![Party Lobby](Screenshot%202026-03-16%20185648.png)
+![Party Lobby](Snapshots/Screenshot%202026-03-16%20185648.png)
 
 ## Battle System
-![Battle System](Screenshot%202026-03-16%20185835.png)
+![Battle System](Snapshots/Screenshot%202026-03-16%20185835.png)
 
 ## User Profile & Inventory
-![Profile](Screenshot%202026-03-16%20185907.png)
+![Profile](Snapshots/Screenshot%202026-03-16%20185907.png)
 
 ## Task Tracker
-![Task Tracker](Screenshot%202026-03-16%20185919.png)
+![Task Tracker](Snapshots/Screenshot%202026-03-16%20185919.png)
 
 ## Productivity Analytics
-![Analytics](Screenshot%202026-03-16%20185933.png)
+![Analytics](Snapshots/Screenshot%202026-03-16%20185933.png)
