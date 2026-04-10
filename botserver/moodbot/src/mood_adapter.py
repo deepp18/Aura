@@ -11,7 +11,8 @@ CORS(app)
 # MongoDB Connection
 # -------------------------
 
-client = MongoClient("mongodb://localhost:27017/")
+client = MongoClient("mongodb+srv://shreyashir32_db_user:FQVBJ3YMMhS9X3fM@cluster0.x4cqic5.mongodb.net/?appName=Cluster0")
+
 db = client["aura"]
 mood_collection = db["moods"]
 
