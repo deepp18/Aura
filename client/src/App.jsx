@@ -39,7 +39,7 @@ import Learning from "./pages/Learning";
 import LeaderBoard from "./pages/FriendsPage";
 import Tracker from "./pages/helpers/Tracker";
 import Analytic from "./pages/helpers/Analytic";
-
+import MoodScan from "./pages/MoodScan.jsx";
 /* Local assets & small components used by NavBar */
 import logo from "./assets/logo-hck.svg";
 import ExpIcon from "./assets/exp-icon.png";
@@ -56,6 +56,7 @@ const navigation = [
   { name: "Party", href: "/party" },
   { name: "Villages", href: "/stock" },
   { name: "Meditation", href: "/learning" },
+    { name: "Mood Scan", href: "/moodscan" }
 ];
 
 /* -------------------------
@@ -394,6 +395,7 @@ function App() {
         { path: "/financing/qanda", element: <FinancingQAndA /> },
         { path: "/expense-tracker", element: <Tracker /> },
         { path: "/Analytic", element: <Analytic /> },
+        { path: "/moodscan", element: <MoodScan /> }, 
       ],
     },
   ]);
