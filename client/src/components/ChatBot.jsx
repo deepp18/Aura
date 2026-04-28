@@ -78,7 +78,7 @@ const StaggeredDropDown = () => {
 
   // Parse bullets from legacy single-line bot text (if needed)
   const parseTasksFromPlain = (text, emotion = "neutral") => {
-    const matches = Array.from(text.matchAll(/•\s+([^•]+)/g))
+    const matches = Array.from(text.matchAll(/•\s+([^\n]+)/g))
       .map((m) => (m[1] || "").trim())
       .filter(Boolean);
     const now = new Date().toISOString();
@@ -112,10 +112,14 @@ const StaggeredDropDown = () => {
       );
       const data = res.data;
 
-      const reply =
+      let reply =
         data?.reply ||
         data?.message ||
         (typeof data === "string" ? data : JSON.stringify(data));
+
+      if (msgList.length === 0) {
+        reply += "\n\n*(Alternatively, you can [play a minigame](/stock) tailored to your current mood to help you unwind!)*";
+      }
 
       addMessage({ msg: reply, type: "bot" });
 
@@ -134,6 +138,7 @@ const StaggeredDropDown = () => {
       if (!email) {
         console.warn("No user email found; cannot save tasks.");
       } else {
+        let taskLinksMap = [];
         for (const task of tasks) {
           const safeTask = {
             title: task.title || task.task || "Suggested task",
@@ -146,7 +151,29 @@ const StaggeredDropDown = () => {
                 : true,
             date: task.date || new Date().toISOString(),
           };
-          await Api.addTask({ email, task: safeTask });
+          try {
+            const resTask = await Api.addTask({ email, task: safeTask });
+            if (resTask.data && resTask.data.task && resTask.data.task._id) {
+              taskLinksMap.push({ title: safeTask.title, url: `/tasks#task-${resTask.data.task._id}` });
+            }
+          } catch(err) {
+            console.error("Failed adding task", err);
+          }
+        }
+
+        if (taskLinksMap.length > 0) {
+          setMsgList((prev) => {
+            const newList = [...prev];
+            const lastIndex = newList.length - 1;
+            if (lastIndex >= 0 && newList[lastIndex].type === "bot") {
+              let updatedMsg = newList[lastIndex].msg;
+              taskLinksMap.forEach((tl) => {
+                updatedMsg = updatedMsg.replace(tl.title, `[${tl.title}](${tl.url})`);
+              });
+              newList[lastIndex] = { ...newList[lastIndex], msg: updatedMsg };
+            }
+            return newList;
+          });
         }
 
         if (tasks.length) {

@@ -91,10 +91,10 @@ LABEL_MAP = {
 # -------------------------
 
 TEMPLATES = {
-    "joy":"That's wonderful — enjoy it and maybe try:",
-    "sadness":"I'm sorry you're sad. A comforting small step:",
-    "anger":"I'm sorry you're feeling angry. Here's something small you can try:",
-    "neutral":"That's okay. Try a tiny mood boost:"
+    "joy": "That's wonderful to hear! Hold onto that feeling, and maybe try this to spread the joy:",
+    "sadness": "I'm so sorry you're feeling down. Take all the time you need. When you're ready, here's a gentle step that might bring a little comfort:",
+    "anger": "It's completely okay to feel frustrated or angry right now. Your feelings are valid. When you feel ready to pause, here's something small that might help you find some peace:",
+    "neutral": "I'm here with you. If you'd like a gentle way to lift your spirits, here is a tiny mood boost you could try:"
 }
 
 # -------------------------
@@ -154,10 +154,10 @@ def predict():
     })
 
     if "bored" in text.lower():
-        reply = "It sounds like you're feeling a bit bored. I have a suggestion:"
-        tasks = [{"task": "Why not play a quick game like the Stock Game or Village on our platform to refresh your mind?", "points": 5}]
+        reply = "It sounds like things are feeling a bit slow right now. I have a gentle suggestion that might bring a spark to your day:"
+        tasks = [{"task": "Take 10 minutes to explore a topic you've never looked into before.", "points": 5}]
     else:
-        reply = TEMPLATES.get(emotion,"I hear you. Try this:")
+        reply = TEMPLATES.get(emotion, "I hear you, and I'm here for you. Whenever you're ready, this might be comforting to try:")
         tasks = entry["tasks"][:2]
 
     lines = [reply]
@@ -165,7 +165,7 @@ def predict():
     for t in tasks:
         lines.append(f"• {t['task']}")
 
-    body = " ".join(lines)
+    body = " \n\n ".join(lines)
 
     return (body,200,{"Content-Type":"text/plain; charset=utf-8"})
 

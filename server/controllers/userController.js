@@ -329,7 +329,8 @@ class UserController {
       task.date = tempDate;
       user.tasks.push(task);
       await user.save();
-      res.status(200).json({ message: "success" });
+      const addedTask = user.tasks[user.tasks.length - 1];
+      res.status(200).json({ message: "success", task: addedTask });
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: "Internal Server Error" });
