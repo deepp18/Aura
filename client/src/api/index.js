@@ -166,6 +166,14 @@ class Api {
     return await api.post("api/user/delete-expense", data);
   }
 
+  static async addJournal(data) {
+    return await api.post("api/user/add-journal", data);
+  }
+
+  static async getJournals(data) {
+    return await api.post("api/user/get-journals", data);
+  }
+
 }
 
 export default Api;

@@ -7,6 +7,8 @@ import ZenGarden from "./components/ZenGarden";
 import MindfulSudoku from "./components/MindfulSudoku";
 import WatercolorJourney from "./components/WatercolorJourney";
 import Masterpieces from "./components/Masterpieces";
+import Canvas from "./components/Canvas";
+
 /* ═══════════════════════════════════════════════════════════════
    AURA — VILLAGES · MOOD THERAPY GAMES
    7 clinically-inspired interactive games mapped to emotional states

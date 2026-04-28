@@ -3,6 +3,7 @@ import time
 import cv2
 import numpy as np
 import os
+import collections
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import img_to_array
 
@@ -78,10 +79,17 @@ def main():
 
     fps_time = time.time()
     frames = 0
+    start_time = time.time()
+    emotions_detected = []
     final_emotion = "No face detected"
 
     try:
         while True:
+            # Check if 15 seconds have passed
+            if time.time() - start_time >= 15:
+                print("[INFO] 15 seconds passed. Closing camera automatically.")
+                break
+
             ok, frame = cap.read()
             if not ok:
                 print("[WARN] frame grab failed")
@@ -98,7 +106,7 @@ def main():
             if len(faces) > 0:
                 faces = sorted(faces, key=lambda b: b[2]*b[3], reverse=True)
                 label, _ = predict_face(model, gray, faces[0])
-                final_emotion = label   # 🔥 store latest emotion
+                emotions_detected.append(label)
                 frame = draw_label(frame, faces[0], label)
 
             frames += 1
@@ -116,6 +124,10 @@ def main():
                     (255,255,255),
                     2
                 )
+            
+            # Display time remaining
+            time_left = max(0, 15 - int(time.time() - start_time))
+            cv2.putText(frame, f"Time left: {time_left}s", (10, 55), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 255), 2)
 
             cv2.imshow("Aura Mood Scan", frame)
 
@@ -125,6 +137,16 @@ def main():
     finally:
         cap.release()
         cv2.destroyAllWindows()
+        if emotions_detected:
+            # Find the most frequent emotion using Counter
+            counts = collections.Counter(emotions_detected)
+            most_common = counts.most_common()
+            
+            if len(most_common) > 1 and most_common[0][0] == "Neutral":
+                final_emotion = most_common[1][0]
+            else:
+                final_emotion = most_common[0][0]
+        
         print(final_emotion)
 
 if __name__ == "__main__":

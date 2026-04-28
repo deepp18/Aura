@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { combine } from "../utils/combine";
+import { combine } from "../utils/utils/combine";
 
 export default function Canvas({ elements, setElements, genre }) {
   const [placed, setPlaced] = useState([]);

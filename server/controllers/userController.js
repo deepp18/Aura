@@ -888,6 +888,38 @@ class UserController {
     }
   };
   
+  addJournal = async (req, res) => {
+    try {
+      const { email, content } = req.body;
+      const user = await User.findOne({ email });
+      if (!user)
+        return res.status(404).json({ message: "User does not exist!" });
+      if (!user.journals) user.journals = [];
+      user.journals.push({ content });
+      await user.save();
+      res.status(200).json({ message: "success", journal: user.journals[user.journals.length - 1] });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  };
+
+  getJournals = async (req, res) => {
+    try {
+      const { email } = req.body;
+      const user = await User.findOne({ email });
+      if (!user)
+        return res.status(404).json({ message: "User does not exist!" });
+      if (!user.journals) user.journals = [];
+      // Sort journals by date descending (newest first)
+      const sortedJournals = user.journals.sort((a, b) => new Date(b.date) - new Date(a.date));
+      res.status(200).json({ message: "success", journals: sortedJournals });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  };
+
 }
 
 export default UserController;

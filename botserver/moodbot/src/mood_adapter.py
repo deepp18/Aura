@@ -153,9 +153,12 @@ def predict():
         "mood": mood_score
     })
 
-    reply = TEMPLATES.get(emotion,"I hear you. Try this:")
-
-    tasks = entry["tasks"][:2]
+    if "bored" in text.lower():
+        reply = "It sounds like you're feeling a bit bored. I have a suggestion:"
+        tasks = [{"task": "Why not play a quick game like the Stock Game or Village on our platform to refresh your mind?", "points": 5}]
+    else:
+        reply = TEMPLATES.get(emotion,"I hear you. Try this:")
+        tasks = entry["tasks"][:2]
 
     lines = [reply]
 

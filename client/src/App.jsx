@@ -55,8 +55,9 @@ const navigation = [
   { name: "Tasks", href: "/tasks" },
   { name: "Party", href: "/party" },
   { name: "Villages", href: "/stock" },
-  { name: "Meditation", href: "/learning" },
-    { name: "Mood Scan", href: "/moodscan" }
+  { name: "Mood Scan", href: "/moodscan" },
+  { name: "Blogs", href: "/learning" },
+  
 ];
 
 /* -------------------------

@@ -212,6 +212,18 @@ const expenseSchema = new mongoose.Schema({
   },
 });
 
+const journalSchema = new mongoose.Schema({
+  content: {
+    type: String,
+    required: true,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -353,6 +365,7 @@ const userSchema = new mongoose.Schema({
   inventory: inventoryItem,
   tasks: [TaskSchema],
   expenses: [expenseSchema],
+  journals: [journalSchema],
   monthlyIncome: {
     type: Number,
     default: 50000,

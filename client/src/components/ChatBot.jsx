@@ -269,8 +269,8 @@ export default StaggeredDropDown;
 const CLOSED_Y = 200;
 
 const panelVariants = {
-  closed: { scale: 0.8, y: CLOSED_Y, opacity: 0, transition: { type: "spring", stiffness: 500, damping: 40 } },
-  open: { scale: 1, y: 0, opacity: 1, transition: { type: "spring", stiffness: 140, damping: 22, mass: 0.8, delay: 0.1 } },
+  closed: { scale: 0.8, y: CLOSED_Y, opacity: 0, transitionEnd: { display: "none" }, transition: { type: "spring", stiffness: 500, damping: 40 } },
+  open: { display: "flex", scale: 1, y: 0, opacity: 1, transition: { type: "spring", stiffness: 140, damping: 22, mass: 0.8, delay: 0.1 } },
 };
 
 const iconParentVariants = {
